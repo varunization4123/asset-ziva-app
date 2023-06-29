@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "397916699825",
+    "project_id": "asset-ziva",
+    "storage_bucket": "asset-ziva.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:397916699825:android:e7058a192fd3a76d0b7690",
+        "android_client_info": {
+          "package_name": "com.example.asset_ziva"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "397916699825-6r21de3o8huudns51gcrsd2d8ce8n40j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABapaD5tbqGqCerLHLhYKRWkpR4jKhPf0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "397916699825-6r21de3o8huudns51gcrsd2d8ce8n40j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
