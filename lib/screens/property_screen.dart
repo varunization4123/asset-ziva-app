@@ -1,8 +1,10 @@
 import 'package:asset_ziva/provider/auth_provider.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
+import 'package:asset_ziva/utils/global_variables.dart';
 import 'package:asset_ziva/widgets/add_new_property_button.dart';
 import 'package:asset_ziva/widgets/prop_card.dart';
+import 'package:asset_ziva/widgets/services_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -95,6 +97,22 @@ class PropertyScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                GridView.builder(
+                  physics: const ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 0.2,
+                    crossAxisSpacing: 0.2,
+                  ),
+                  itemCount: services.length,
+                  itemBuilder: (context, index) {
+                    return ServicesCard(
+                        service: services[index]['service'],
+                        amount: services[index]['amount']);
+                  },
+                )
               ],
             ),
           ),

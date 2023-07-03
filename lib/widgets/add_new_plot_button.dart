@@ -40,6 +40,7 @@ class _AddNewPlotButtonState extends State<AddNewPlotButton> {
         plotArea.text,
         pinCode.text,
         uid,
+        [],
       );
 
       plotAddress.clear();

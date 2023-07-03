@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
 
 void showSnackBar(BuildContext context, String content) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -24,4 +25,21 @@ Future<File?> pickImage(BuildContext context) async {
   }
 
   return image;
+}
+
+Future<File?> pickFile(BuildContext context) async {
+  File? file;
+  try {
+    final pickedFile = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'doc'],
+    );
+    if (pickedFile != null) {
+      file = File(pickedFile.files.single.path!);
+    }
+  } catch (e) {
+    showSnackBar(context, e.toString());
+  }
+
+  return file;
 }

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:asset_ziva/model/services_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,6 +10,7 @@ import 'package:asset_ziva/model/user_model.dart';
 import 'package:asset_ziva/screens/otp_screen.dart';
 import 'package:asset_ziva/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class AuthProvider extends ChangeNotifier {
   bool _isSignedIn = false;
@@ -19,6 +21,8 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
   UserModel? _userModel;
   UserModel get userModel => _userModel!;
+  ServicesModel? _servicesModel;
+  ServicesModel get servicesModel => _servicesModel!;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -168,6 +172,83 @@ class AuthProvider extends ChangeNotifier {
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
+        services: snapshot['services'],
+      );
+      _uid = userModel.uid;
+    });
+  }
+
+  // DATABASE OPERTAIONS (Service)
+
+  Future<String> storeDocumentToStorage(String ref, File file) async {
+    UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  void saveServiceToFirebase({
+    required BuildContext context,
+    required ServicesModel servicesModel,
+    required File document,
+    required Function onSuccess,
+    required String propertyId,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      String serviceId = const Uuid().v1();
+
+      // uploading image to firebase storage.
+      await storeDocumentToStorage("serviceDocuments/$propertyId", document)
+          .then((value) {
+        servicesModel.document = value;
+        servicesModel.propertyId = propertyId;
+        servicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      });
+      _userModel = userModel;
+
+      // uploading to database
+      await _firebaseFirestore
+          .collection("properties")
+          .doc(propertyId)
+          .collection("services")
+          .doc(serviceId)
+          .set(servicesModel.toMap())
+          .then((value) {
+        onSuccess();
+        _isLoading = false;
+        notifyListeners();
+      });
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message.toString());
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<String> storeServiceToStorage(String ref, File file) async {
+    UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  Future getServiceFirestore() async {
+    await _firebaseFirestore
+        .collection("users")
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get()
+        .then((DocumentSnapshot snapshot) {
+      _userModel = UserModel(
+        name: snapshot['name'],
+        email: snapshot['email'],
+        createdAt: snapshot['createdAt'],
+        bio: snapshot['bio'],
+        uid: snapshot['uid'],
+        profilePic: snapshot['profilePic'],
+        phoneNumber: snapshot['phoneNumber'],
+        services: snapshot['services'],
       );
       _uid = userModel.uid;
     });

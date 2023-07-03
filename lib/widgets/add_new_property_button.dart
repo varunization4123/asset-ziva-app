@@ -40,6 +40,7 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
         propertyArea.text,
         pinCode.text,
         uid,
+        [],
       );
 
       propertyAddress.clear();

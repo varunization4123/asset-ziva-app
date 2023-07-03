@@ -8,6 +8,7 @@ class PlotModel {
   // String plotUrl;
   String pinCode;
   String uid;
+  final services;
 
   PlotModel({
     required this.plotName,
@@ -19,6 +20,7 @@ class PlotModel {
     // required this.plotUrl,
     required this.pinCode,
     required this.uid,
+    required this.services,
   });
 
   // from map
@@ -33,6 +35,7 @@ class PlotModel {
       // plotUrl: map['plotUrl'] ?? '',
       pinCode: map['pinCode'] ?? '',
       uid: map['uid'] ?? '',
+      services: map['services'] ?? '',
     );
   }
 
@@ -48,6 +51,7 @@ class PlotModel {
       // "plotUrl": plotUrl,
       "pinCode": pinCode,
       "uid": uid,
+      "services": services,
     };
   }
 }

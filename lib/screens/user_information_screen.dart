@@ -136,6 +136,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
       createdAt: "",
       phoneNumber: "",
       uid: "",
+      services: [],
     );
     if (image != null) {
       ap.saveUserDataToFirebase(

@@ -8,6 +8,7 @@ class PropertyModel {
   // String propertyUrl;
   String pinCode;
   String uid;
+  final services;
 
   PropertyModel({
     required this.propertyName,
@@ -19,6 +20,7 @@ class PropertyModel {
     // required this.propertyUrl,
     required this.pinCode,
     required this.uid,
+    required this.services,
   });
 
   // from map
@@ -33,6 +35,7 @@ class PropertyModel {
       // propertyUrl: map['propertyUrl'] ?? '',
       pinCode: map['pinCode'] ?? '',
       uid: map['uid'] ?? '',
+      services: map['services'] ?? '',
     );
   }
 
@@ -48,6 +51,7 @@ class PropertyModel {
       // "propertyUrl": propertyUrl,
       "pinCode": pinCode,
       "uid": uid,
+      "services": services,
     };
   }
 }
