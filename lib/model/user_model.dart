@@ -1,9 +1,9 @@
 class UserModel {
   String name;
   String email;
-  String bio;
+  // String bio;
   String profilePic;
-  String createdAt;
+  // String createdAt;
   String phoneNumber;
   String uid;
   var services;
@@ -11,9 +11,9 @@ class UserModel {
   UserModel({
     required this.name,
     required this.email,
-    required this.bio,
+    // required this.bio,
     required this.profilePic,
-    required this.createdAt,
+    // required this.createdAt,
     required this.phoneNumber,
     required this.uid,
     required this.services,
@@ -24,10 +24,10 @@ class UserModel {
     return UserModel(
       name: map['name'] ?? '',
       email: map['email'] ?? '',
-      bio: map['bio'] ?? '',
+      // bio: map['bio'] ?? '',
       uid: map['uid'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
-      createdAt: map['createdAt'] ?? '',
+      // createdAt: map['createdAt'] ?? '',
       profilePic: map['profilePic'] ?? '',
       services: map['services'] ?? '',
     );
@@ -39,10 +39,10 @@ class UserModel {
       "name": name,
       "email": email,
       "uid": uid,
-      "bio": bio,
+      // "bio": bio,
       "profilePic": profilePic,
       "phoneNumber": phoneNumber,
-      "createdAt": createdAt,
+      // "createdAt": createdAt,
       "services": services,
     };
   }

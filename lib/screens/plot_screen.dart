@@ -1,8 +1,10 @@
 import 'package:asset_ziva/provider/auth_provider.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
-import 'package:asset_ziva/widgets/add_new_property_button.dart';
+import 'package:asset_ziva/utils/global_variables.dart';
+import 'package:asset_ziva/widgets/add_new_plot_button.dart';
 import 'package:asset_ziva/widgets/plot_card.dart';
+import 'package:asset_ziva/widgets/plot_services_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,7 +63,7 @@ class PlotScreen extends StatelessWidget {
                     StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('plots')
-                          .where('uid', isEqualTo: ap.uid)
+                          .where('uid', isEqualTo: ap.userModel.phoneNumber)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -82,8 +84,8 @@ class PlotScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: gap),
                     SingleChildScrollView(
-                      child: AddNewPropertyButton(
-                        propertyId: ap.userModel.uid,
+                      child: AddNewPlotButton(
+                        plotId: ap.userModel.phoneNumber,
                       ),
                     ),
                   ],
@@ -95,6 +97,22 @@ class PlotScreen extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+                GridView.builder(
+                  physics: const ScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 0.2,
+                    crossAxisSpacing: 0.2,
+                  ),
+                  itemCount: services.length,
+                  itemBuilder: (context, index) {
+                    return PlotServicesCard(
+                        service: services[index]['service'],
+                        amount: services[index]['amount']);
+                  },
+                )
               ],
             ),
           ),

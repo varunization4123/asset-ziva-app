@@ -1,19 +1,20 @@
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
-import 'package:asset_ziva/widgets/add_service_form.dart';
+import 'package:asset_ziva/widgets/add_property_service_form.dart';
 import 'package:flutter/material.dart';
 
-class ServicesCard extends StatefulWidget {
+class PropertyServicesCard extends StatefulWidget {
   final String service;
   final int amount;
 
-  ServicesCard({super.key, required this.service, required this.amount});
+  PropertyServicesCard(
+      {super.key, required this.service, required this.amount});
 
   @override
-  State<ServicesCard> createState() => _ServicesCardState();
+  State<PropertyServicesCard> createState() => _PropertyServicesCardState();
 }
 
-class _ServicesCardState extends State<ServicesCard> {
+class _PropertyServicesCardState extends State<PropertyServicesCard> {
   var result;
 
   // void addPropertyService({
@@ -47,7 +48,7 @@ class _ServicesCardState extends State<ServicesCard> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                content: AddServiceForm(
+                content: AddPropertyServiceForm(
                   service: widget.service,
                   amount: widget.amount,
                 ),

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:asset_ziva/model/services_model.dart';
+import 'package:asset_ziva/model/property_services_model.dart';
 import 'package:asset_ziva/provider/auth_provider.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
@@ -11,20 +11,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AddServiceForm extends StatefulWidget {
+class AddPropertyServiceForm extends StatefulWidget {
   final String service;
   final int amount;
-  const AddServiceForm(
+  const AddPropertyServiceForm(
       {super.key, required this.service, required this.amount});
 
   @override
-  State<AddServiceForm> createState() => _AddServiceFormState();
+  State<AddPropertyServiceForm> createState() => _AddPropertyServiceFormState();
 }
 
-class _AddServiceFormState extends State<AddServiceForm> {
+class _AddPropertyServiceFormState extends State<AddPropertyServiceForm> {
   File? file;
   String? property;
-  String propertyId = 'b634df20-1286-11ee-915b-49a7bf622482';
+  late String propertyId;
 
   // for selecting file
   void selectFile() async {
@@ -35,6 +35,8 @@ class _AddServiceFormState extends State<AddServiceForm> {
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
+    final isLoading =
+        Provider.of<AuthProvider>(context, listen: true).isLoading;
 
     return Stack(
       children: <Widget>[
@@ -69,7 +71,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
               StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("properties")
-                    .where('uid', isEqualTo: ap.uid)
+                    .where('uid', isEqualTo: ap.userModel.phoneNumber)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
@@ -77,13 +79,24 @@ class _AddServiceFormState extends State<AddServiceForm> {
                   }
                   final userSnapshots = snapshot.data?.docs;
                   if (userSnapshots!.isEmpty) {
-                    return const Text("no data");
+                    return const Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+                      child: Text("Please Add a Property to continue"),
+                    );
                   }
                   List<String> properties = [];
+                  Map<String, String> propertiesIds = {};
                   for (var i = 0; i < userSnapshots.length; i++) {
                     properties.add(userSnapshots[i]["city"]);
                   }
+                  for (var i = 0; i < userSnapshots.length; i++) {
+                    propertiesIds.addAll({
+                      userSnapshots[i]["propertyId"]: userSnapshots[i]["city"]
+                    });
+                  }
                   print(properties);
+                  print(propertiesIds);
 
                   return CustomDropdownButton(
                     hintText: "choose property",
@@ -92,6 +105,9 @@ class _AddServiceFormState extends State<AddServiceForm> {
                     onChanged: (value) {
                       setState(() {
                         property = value!;
+                        propertyId = propertiesIds.keys.firstWhere(
+                          (element) => propertiesIds[element] == property,
+                        );
                       });
                     },
                     getLabel: (String? value) => value!,
@@ -136,10 +152,21 @@ class _AddServiceFormState extends State<AddServiceForm> {
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width,
                   height: 50,
-                  child: CustomButton(
-                    text: "Add Service",
-                    onPressed: () => storeFile(),
-                  ),
+                  child: isLoading == true
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: primaryColor,
+                          ),
+                        )
+                      : CustomButton(
+                          text: "Add Service",
+                          onPressed: () {
+                            if (property != null) {
+                              storeFile();
+                            } else {
+                              showSnackBar(context, 'Please select the Plot');
+                            }
+                          }),
                 ),
               ),
             ],
@@ -155,13 +182,13 @@ class _AddServiceFormState extends State<AddServiceForm> {
     ServicesModel servicesModel = ServicesModel(
       service: widget.service,
       amount: widget.amount.toString(),
-      city: "",
+      city: 'Property $property',
       document: "",
-      propertyId: property!,
+      propertyId: propertyId,
       uid: '',
     );
     if (file != null) {
-      ap.saveServiceToFirebase(
+      ap.savePropertyServiceToFirebase(
         propertyId: propertyId,
         context: context,
         servicesModel: servicesModel,

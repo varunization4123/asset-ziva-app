@@ -109,7 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('properties')
-                          .where('uid', isEqualTo: ap.uid)
+                          .where('uid', isEqualTo: ap.userModel.phoneNumber)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
@@ -121,6 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         }
                         return ListView.builder(
+                            physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) => PropertyCard(
@@ -148,7 +149,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     StreamBuilder(
                       stream: FirebaseFirestore.instance
                           .collection('plots')
-                          .where('uid', isEqualTo: ap.uid)
+                          .where('uid', isEqualTo: ap.userModel.phoneNumber)
                           .snapshots(),
                       builder: (BuildContext context,
                           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>

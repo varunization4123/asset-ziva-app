@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:asset_ziva/model/services_model.dart';
+import 'package:asset_ziva/model/property_services_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -128,7 +128,7 @@ class AuthProvider extends ChangeNotifier {
       // uploading image to firebase storage.
       await storeFileToStorage("profilePic/$_uid", profilePic).then((value) {
         userModel.profilePic = value;
-        userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
+        // userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
         userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
         userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
       });
@@ -167,18 +167,19 @@ class AuthProvider extends ChangeNotifier {
       _userModel = UserModel(
         name: snapshot['name'],
         email: snapshot['email'],
-        createdAt: snapshot['createdAt'],
-        bio: snapshot['bio'],
+        // createdAt: snapshot['createdAt'],
+        // bio: snapshot['bio'],
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
         services: snapshot['services'],
       );
       _uid = userModel.uid;
+      print(_uid);
     });
   }
 
-  // DATABASE OPERTAIONS (Service)
+  // DATABASE OPERTAIONS (Property Service)
 
   Future<String> storeDocumentToStorage(String ref, File file) async {
     UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
@@ -187,7 +188,7 @@ class AuthProvider extends ChangeNotifier {
     return downloadUrl;
   }
 
-  void saveServiceToFirebase({
+  void savePropertyServiceToFirebase({
     required BuildContext context,
     required ServicesModel servicesModel,
     required File document,
@@ -227,6 +228,48 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  // DATABASE OPERTAIONS (Plot Service)
+
+  void savePlotServiceToFirebase({
+    required BuildContext context,
+    required ServicesModel servicesModel,
+    required File document,
+    required Function onSuccess,
+    required String plotId,
+  }) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      String serviceId = const Uuid().v1();
+
+      // uploading image to firebase storage.
+      await storeDocumentToStorage("serviceDocuments/$plotId", document)
+          .then((value) {
+        servicesModel.document = value;
+        servicesModel.propertyId = plotId;
+        servicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+      });
+      _userModel = userModel;
+
+      // uploading to database
+      await _firebaseFirestore
+          .collection("plots")
+          .doc(plotId)
+          .collection("services")
+          .doc(serviceId)
+          .set(servicesModel.toMap())
+          .then((value) {
+        onSuccess();
+        _isLoading = false;
+        notifyListeners();
+      });
+    } on FirebaseAuthException catch (e) {
+      showSnackBar(context, e.message.toString());
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<String> storeServiceToStorage(String ref, File file) async {
     UploadTask uploadTask = _firebaseStorage.ref().child(ref).putFile(file);
     TaskSnapshot snapshot = await uploadTask;
@@ -243,8 +286,8 @@ class AuthProvider extends ChangeNotifier {
       _userModel = UserModel(
         name: snapshot['name'],
         email: snapshot['email'],
-        createdAt: snapshot['createdAt'],
-        bio: snapshot['bio'],
+        // createdAt: snapshot['createdAt'],
+        // bio: snapshot['bio'],
         uid: snapshot['uid'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],

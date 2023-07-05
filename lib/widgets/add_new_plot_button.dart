@@ -40,7 +40,6 @@ class _AddNewPlotButtonState extends State<AddNewPlotButton> {
         plotArea.text,
         pinCode.text,
         uid,
-        [],
       );
 
       plotAddress.clear();
@@ -48,7 +47,8 @@ class _AddNewPlotButtonState extends State<AddNewPlotButton> {
       plotArea.clear();
       pinCode.clear();
 
-      if (res != 'success') {
+      if (res != 'sucess') {
+        // ignore: use_build_context_synchronously
         showSnackBar(context, 'something went wrong');
       }
     } catch (e) {
@@ -164,9 +164,10 @@ class _AddNewPlotButtonState extends State<AddNewPlotButton> {
             text: 'Add Plot',
             onPressed: () {
               createProperty(
-                uid: ap.uid,
+                uid: ap.userModel.phoneNumber,
                 propertyId: widget.plotId,
               );
+              setState(() {});
             },
           )
         ],

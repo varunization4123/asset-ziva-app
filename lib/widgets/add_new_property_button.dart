@@ -40,7 +40,6 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
         propertyArea.text,
         pinCode.text,
         uid,
-        [],
       );
 
       propertyAddress.clear();
@@ -48,7 +47,10 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
       propertyArea.clear();
       pinCode.clear();
 
-      if (res != 'success') {
+      print(res);
+
+      if (res != 'sucess') {
+        // ignore: use_build_context_synchronously
         showSnackBar(context, 'something went wrong');
       }
     } catch (e) {
@@ -164,9 +166,10 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
             text: 'Add Property',
             onPressed: () {
               createProperty(
-                uid: ap.uid,
+                uid: ap.userModel.phoneNumber,
                 propertyId: widget.propertyId,
               );
+              setState(() {});
             },
           )
         ],

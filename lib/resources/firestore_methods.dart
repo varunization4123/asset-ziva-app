@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_print
 
-import 'package:asset_ziva/model/services_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:asset_ziva/model/plot_model.dart';
@@ -25,7 +24,6 @@ class FirestoreMethods extends ChangeNotifier {
     String propertyArea,
     String pinCode,
     String uid,
-    services,
     // Function onSuccess,
   ) async {
     String res = "Something went wrong";
@@ -45,7 +43,6 @@ class FirestoreMethods extends ChangeNotifier {
         pinCode: pinCode,
         // propertyUrl: propertyUrl,
         uid: uid,
-        services: [],
       );
 
       _firestore
@@ -73,7 +70,6 @@ class FirestoreMethods extends ChangeNotifier {
     String plotArea,
     String pinCode,
     String uid,
-    services,
     // Function onSuccess,
   ) async {
     String res = "Something went wrong";
@@ -93,7 +89,6 @@ class FirestoreMethods extends ChangeNotifier {
         pinCode: pinCode,
         // plotUrl: plotUrl,
         uid: uid,
-        services: [],
       );
 
       _firestore
@@ -104,91 +99,6 @@ class FirestoreMethods extends ChangeNotifier {
         _isLoading = false;
         notifyListeners();
       });
-
-      res = 'sucess';
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
-      notifyListeners();
-    }
-
-    return res;
-  }
-
-  Future<String> addPropertyService(
-    BuildContext context,
-    // Uint8List img,
-    String service,
-    String amount,
-    String city,
-    String document,
-    String propertyId,
-    String uid,
-    // Function onSuccess,
-  ) async {
-    String res = "Something went wrong";
-    try {
-      // String propertyUrl =
-      //     await StorageMethods().uploadImageToStorage('propertyPic', img, true);
-
-      String serviceId = const Uuid().v1();
-
-      ServicesModel servicesModel = ServicesModel(
-          service: service,
-          amount: amount,
-          city: city,
-          document: document,
-          propertyId: propertyId,
-          uid: uid);
-
-      _firestore
-          .collection('properties')
-          .doc(propertyId)
-          .collection('services')
-          .doc(serviceId)
-          .set(servicesModel.toMap());
-
-      res = 'sucess';
-    } on FirebaseAuthException catch (e) {
-      showSnackBar(context, e.message.toString());
-      notifyListeners();
-    }
-
-    return res;
-  }
-
-  Future<String> addPlotService(
-    BuildContext context,
-    // Uint8List img,
-    String service,
-    String amount,
-    String city,
-    String document,
-    String plotId,
-    String uid,
-    // Function onSuccess,
-  ) async {
-    String res = "Something went wrong";
-    try {
-      // String propertyUrl =
-      //     await StorageMethods().uploadImageToStorage('propertyPic', img, true);
-
-      String serviceId = const Uuid().v1();
-
-      ServicesModel servicesModel = ServicesModel(
-        service: service,
-        amount: amount,
-        city: city,
-        document: document,
-        propertyId: plotId,
-        uid: uid,
-      );
-
-      _firestore
-          .collection('properties')
-          .doc(plotId)
-          .collection('services')
-          .doc(serviceId)
-          .set(servicesModel.toMap());
 
       res = 'sucess';
     } on FirebaseAuthException catch (e) {
