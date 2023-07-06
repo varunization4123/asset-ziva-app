@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:asset_ziva/model/plot_services_model.dart';
 import 'package:asset_ziva/model/property_services_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,8 +22,10 @@ class AuthProvider extends ChangeNotifier {
   String get uid => _uid!;
   UserModel? _userModel;
   UserModel get userModel => _userModel!;
-  ServicesModel? _servicesModel;
-  ServicesModel get servicesModel => _servicesModel!;
+  PropertyServicesModel? _propertyServicesModel;
+  PropertyServicesModel get propertyServicesModel => _propertyServicesModel!;
+  PropertyServicesModel? _plotServicesModel;
+  PropertyServicesModel get plotServicesModel => _plotServicesModel!;
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
@@ -190,7 +193,7 @@ class AuthProvider extends ChangeNotifier {
 
   void savePropertyServiceToFirebase({
     required BuildContext context,
-    required ServicesModel servicesModel,
+    required PropertyServicesModel propertyServicesModel,
     required File document,
     required Function onSuccess,
     required String propertyId,
@@ -201,11 +204,12 @@ class AuthProvider extends ChangeNotifier {
       String serviceId = const Uuid().v1();
 
       // uploading image to firebase storage.
-      await storeDocumentToStorage("serviceDocuments/$propertyId", document)
+      await storeDocumentToStorage(
+              "propertyServiceDocuments/$propertyId", document)
           .then((value) {
-        servicesModel.document = value;
-        servicesModel.propertyId = propertyId;
-        servicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+        propertyServicesModel.document = value;
+        propertyServicesModel.propertyId = propertyId;
+        propertyServicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
       });
       _userModel = userModel;
 
@@ -215,7 +219,7 @@ class AuthProvider extends ChangeNotifier {
           .doc(propertyId)
           .collection("services")
           .doc(serviceId)
-          .set(servicesModel.toMap())
+          .set(propertyServicesModel.toMap())
           .then((value) {
         onSuccess();
         _isLoading = false;
@@ -232,7 +236,7 @@ class AuthProvider extends ChangeNotifier {
 
   void savePlotServiceToFirebase({
     required BuildContext context,
-    required ServicesModel servicesModel,
+    required PlotServicesModel plotServicesModel,
     required File document,
     required Function onSuccess,
     required String plotId,
@@ -243,11 +247,11 @@ class AuthProvider extends ChangeNotifier {
       String serviceId = const Uuid().v1();
 
       // uploading image to firebase storage.
-      await storeDocumentToStorage("serviceDocuments/$plotId", document)
+      await storeDocumentToStorage("plotServiceDocuments/$plotId", document)
           .then((value) {
-        servicesModel.document = value;
-        servicesModel.propertyId = plotId;
-        servicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+        plotServicesModel.document = value;
+        plotServicesModel.plotId = plotId;
+        plotServicesModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
       });
       _userModel = userModel;
 
@@ -257,7 +261,7 @@ class AuthProvider extends ChangeNotifier {
           .doc(plotId)
           .collection("services")
           .doc(serviceId)
-          .set(servicesModel.toMap())
+          .set(plotServicesModel.toMap())
           .then((value) {
         onSuccess();
         _isLoading = false;

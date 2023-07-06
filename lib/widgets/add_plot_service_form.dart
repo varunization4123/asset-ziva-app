@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:asset_ziva/model/property_services_model.dart';
+import 'package:asset_ziva/model/plot_services_model.dart';
 import 'package:asset_ziva/provider/auth_provider.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
@@ -10,6 +10,7 @@ import 'package:asset_ziva/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class AddPlotServiceForm extends StatefulWidget {
   final String service;
@@ -25,6 +26,7 @@ class _AddPlotServiceFormState extends State<AddPlotServiceForm> {
   File? file;
   String? plot;
   late String plotId;
+  String? paymentId;
 
   // for selecting file
   void selectFile() async {
@@ -160,10 +162,36 @@ class _AddPlotServiceFormState extends State<AddPlotServiceForm> {
                       : CustomButton(
                           text: "Add Service",
                           onPressed: () {
-                            if (plot != null) {
-                              storeFile();
-                            } else {
+                            if (plot != null && file != null) {
+                              Razorpay razorpay = Razorpay();
+                              var options = {
+                                'key': 'rzp_live_ILgsfZCZoFIKMb',
+                                'amount': 500,
+                                'name': 'Asset Ziva',
+                                'description': 'Vendor Fees',
+                                'retry': {'enabled': true, 'max_count': 1},
+                                'send_sms_hash': true,
+                                'prefill': {
+                                  'contact': ap.userModel.name,
+                                  'email': ap.userModel.email,
+                                },
+                                'external': {
+                                  'wallets': ['paytm']
+                                }
+                              };
+                              razorpay.on(
+                                Razorpay.EVENT_PAYMENT_ERROR,
+                                handlePaymentErrorResponse,
+                              );
+                              razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                                  handlePaymentSuccessResponse);
+                              razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                                  handleExternalWalletSelected);
+                              razorpay.open(options);
+                            } else if (plot == null) {
                               showSnackBar(context, 'Please select the Plot');
+                            } else {
+                              showSnackBar(context, 'Please select a file');
                             }
                           }),
                 ),
@@ -175,22 +203,101 @@ class _AddPlotServiceFormState extends State<AddPlotServiceForm> {
     );
   }
 
+  // Payment Failure
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    /*
+    * PaymentFailureResponse contains three values:
+    * 1. Error Code
+    * 2. Error Description
+    * 3. Metadata
+    * */
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+  }
+
+  // Payment Success
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    /*
+    * Payment Success Response contains three values:
+    * 1. Order ID
+    * 2. Payment ID
+    * 3. Signature
+    * */
+
+    showAlertDialog(
+        context, "Payment Successful", "Payment ID: ${response.paymentId}");
+    setState(() {
+      paymentId = response.paymentId;
+    });
+    storeFile();
+  }
+
+  // External Wallet
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+        context, "External Wallet Selected", "${response.walletName}");
+  }
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    // set up the buttons
+    Widget continueButton = Center(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            primaryColor,
+          ),
+        ),
+        child: title == 'Payment Successful'
+            ? const Text("Continue")
+            : const Text("Try Again"),
+        onPressed: () {
+          if (title == 'Payment Successful') {
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+          }
+        },
+      ),
+    );
+    // set up the AlertDialog
+    Center alert = Center(
+      child: AlertDialog(
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+        ),
+        // content: Text(message),
+        actions: [
+          continueButton,
+        ],
+      ),
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   // store service file document to database
   void storeFile() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    ServicesModel servicesModel = ServicesModel(
+    PlotServicesModel plotServicesModel = PlotServicesModel(
       service: widget.service,
       amount: widget.amount.toString(),
       city: 'Property $plot',
       document: "",
-      propertyId: plotId,
+      plotId: plotId,
       uid: '',
+      paymentId: paymentId!,
     );
     if (file != null) {
       ap.savePlotServiceToFirebase(
         plotId: plotId,
         context: context,
-        servicesModel: servicesModel,
+        plotServicesModel: plotServicesModel,
         document: file!,
         onSuccess: () {
           ap.saveUserDataToSP().then(

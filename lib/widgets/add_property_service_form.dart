@@ -10,6 +10,7 @@ import 'package:asset_ziva/widgets/custom_text_field.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 class AddPropertyServiceForm extends StatefulWidget {
   final String service;
@@ -25,6 +26,7 @@ class _AddPropertyServiceFormState extends State<AddPropertyServiceForm> {
   File? file;
   String? property;
   late String propertyId;
+  String? paymentId;
 
   // for selecting file
   void selectFile() async {
@@ -161,10 +163,36 @@ class _AddPropertyServiceFormState extends State<AddPropertyServiceForm> {
                       : CustomButton(
                           text: "Add Service",
                           onPressed: () {
-                            if (property != null) {
-                              storeFile();
-                            } else {
+                            if (property != null && file != null) {
+                              Razorpay razorpay = Razorpay();
+                              var options = {
+                                'key': 'rzp_live_ILgsfZCZoFIKMb',
+                                'amount': 500,
+                                'name': 'Asset Ziva',
+                                'description': 'Vendor Fees',
+                                'retry': {'enabled': true, 'max_count': 1},
+                                'send_sms_hash': true,
+                                'prefill': {
+                                  'contact': ap.userModel.name,
+                                  'email': ap.userModel.email,
+                                },
+                                'external': {
+                                  'wallets': ['paytm']
+                                }
+                              };
+                              razorpay.on(
+                                Razorpay.EVENT_PAYMENT_ERROR,
+                                handlePaymentErrorResponse,
+                              );
+                              razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
+                                  handlePaymentSuccessResponse);
+                              razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
+                                  handleExternalWalletSelected);
+                              razorpay.open(options);
+                            } else if (property == null) {
                               showSnackBar(context, 'Please select the Plot');
+                            } else {
+                              showSnackBar(context, 'Please select a file');
                             }
                           }),
                 ),
@@ -176,33 +204,109 @@ class _AddPropertyServiceFormState extends State<AddPropertyServiceForm> {
     );
   }
 
+  // Payment Failure
+  void handlePaymentErrorResponse(PaymentFailureResponse response) {
+    /*
+    * PaymentFailureResponse contains three values:
+    * 1. Error Code
+    * 2. Error Description
+    * 3. Metadata
+    * */
+    showAlertDialog(context, "Payment Failed",
+        "Code: ${response.code}\nDescription: ${response.message}\nMetadata:${response.error.toString()}");
+  }
+
+  // Payment Success
+  void handlePaymentSuccessResponse(PaymentSuccessResponse response) {
+    /*
+    * Payment Success Response contains three values:
+    * 1. Order ID
+    * 2. Payment ID
+    * 3. Signature
+    * */
+
+    showAlertDialog(
+        context, "Payment Successful", "Payment ID: ${response.paymentId}");
+    setState(() {
+      paymentId = response.paymentId;
+    });
+    storeFile();
+  }
+
+  // External Wallet
+  void handleExternalWalletSelected(ExternalWalletResponse response) {
+    showAlertDialog(
+        context, "External Wallet Selected", "${response.walletName}");
+  }
+
+  void showAlertDialog(BuildContext context, String title, String message) {
+    // set up the buttons
+    Widget continueButton = Center(
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            primaryColor,
+          ),
+        ),
+        child: title == 'Payment Successful'
+            ? const Text("Continue")
+            : const Text("Try Again"),
+        onPressed: () {
+          if (title == 'Payment Successful') {
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+          }
+        },
+      ),
+    );
+    // set up the AlertDialog
+    Center alert = Center(
+      child: AlertDialog(
+        title: Text(
+          title,
+          textAlign: TextAlign.center,
+        ),
+        // content: Text(message),
+        actions: [
+          continueButton,
+        ],
+      ),
+    );
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
   // store service file document to database
   void storeFile() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    ServicesModel servicesModel = ServicesModel(
+    PropertyServicesModel propertyServicesModel = PropertyServicesModel(
       service: widget.service,
       amount: widget.amount.toString(),
       city: 'Property $property',
       document: "",
       propertyId: propertyId,
       uid: '',
+      paymentId: paymentId!,
     );
-    if (file != null) {
-      ap.savePropertyServiceToFirebase(
-        propertyId: propertyId,
-        context: context,
-        servicesModel: servicesModel,
-        document: file!,
-        onSuccess: () {
-          ap.saveUserDataToSP().then(
-                (value) => ap.setSignIn().then(
-                      (value) => Navigator.pop(context),
-                    ),
-              );
-        },
-      );
-    } else {
-      showSnackBar(context, "Please select a file");
-    }
+    print('storeFile triggered');
+    ap.savePropertyServiceToFirebase(
+      propertyId: propertyId,
+      context: context,
+      propertyServicesModel: propertyServicesModel,
+      document: file!,
+      onSuccess: () {
+        ap.saveUserDataToSP().then(
+              (value) => ap.setSignIn().then(
+                    (value) => Navigator.pop(context),
+                  ),
+            );
+      },
+    );
   }
 }

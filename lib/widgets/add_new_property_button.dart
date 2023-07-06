@@ -155,7 +155,7 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
                 controller: pinCode,
               ),
               CustomTextField(
-                hintText: 'Area',
+                hintText: 'Area (sqft)',
                 inputType: TextInputType.number,
                 maxLines: 1,
                 controller: propertyArea,

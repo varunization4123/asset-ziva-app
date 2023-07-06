@@ -7,7 +7,7 @@ class PropertyServicesCard extends StatefulWidget {
   final String service;
   final int amount;
 
-  PropertyServicesCard(
+  const PropertyServicesCard(
       {super.key, required this.service, required this.amount});
 
   @override

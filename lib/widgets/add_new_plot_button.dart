@@ -153,7 +153,7 @@ class _AddNewPlotButtonState extends State<AddNewPlotButton> {
                 controller: pinCode,
               ),
               CustomTextField(
-                hintText: 'Area',
+                hintText: 'Area (sqft)',
                 inputType: TextInputType.number,
                 maxLines: 1,
                 controller: plotArea,

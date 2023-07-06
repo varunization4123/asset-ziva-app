@@ -1,4 +1,5 @@
 import 'package:asset_ziva/provider/auth_provider.dart';
+import 'package:asset_ziva/screens/help_screen.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/utils/global_variables.dart';
@@ -39,7 +40,10 @@ class PropertyScreen extends StatelessWidget {
               "Help",
               style: TextStyle(color: inputColor),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const HelpScreen()));
+            },
           ),
         ],
       ),

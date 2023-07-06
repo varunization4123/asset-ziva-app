@@ -7,7 +7,7 @@ class PlotServicesCard extends StatefulWidget {
   final String service;
   final int amount;
 
-  PlotServicesCard({super.key, required this.service, required this.amount});
+  const PlotServicesCard({super.key, required this.service, required this.amount});
 
   @override
   State<PlotServicesCard> createState() => _PlotServicesCardState();

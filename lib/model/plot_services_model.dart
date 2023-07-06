@@ -1,29 +1,32 @@
-class ServicesModel {
+class PlotServicesModel {
   String service;
   String amount;
   String city;
   String document;
   String plotId;
   String uid;
+  String paymentId;
 
-  ServicesModel({
+  PlotServicesModel({
     required this.service,
     required this.amount,
     required this.city,
     required this.document,
     required this.plotId,
     required this.uid,
+    required this.paymentId,
   });
 
   // from map
-  factory ServicesModel.fromMap(Map<String, dynamic> map) {
-    return ServicesModel(
+  factory PlotServicesModel.fromMap(Map<String, dynamic> map) {
+    return PlotServicesModel(
       service: map['service'] ?? '',
       amount: map['amount'] ?? '',
       city: map['city'] ?? '',
       document: map['document'] ?? '',
       plotId: map['plotId'] ?? '',
       uid: map['uid'] ?? '',
+      paymentId: map['paymentId'] ?? '',
     );
   }
 
@@ -36,6 +39,7 @@ class ServicesModel {
       "document": document,
       "propertyId": plotId,
       "uid": uid,
+      "paymentId": paymentId,
     };
   }
 }
