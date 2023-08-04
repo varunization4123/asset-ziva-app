@@ -1,6 +1,6 @@
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
-import 'package:asset_ziva/widgets/add_property_service_form.dart';
+import 'package:asset_ziva/widgets/add_service_form.dart';
 import 'package:flutter/material.dart';
 
 class PropertyServicesCard extends StatefulWidget {
@@ -48,7 +48,7 @@ class _PropertyServicesCardState extends State<PropertyServicesCard> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                content: AddPropertyServiceForm(
+                content: AddServiceForm(
                   service: widget.service,
                   amount: widget.amount,
                 ),

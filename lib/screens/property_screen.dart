@@ -94,29 +94,29 @@ class PropertyScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: gap * 2),
-                const Text(
-                  'Other Services',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GridView.builder(
-                  physics: const ScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 0.2,
-                    crossAxisSpacing: 0.2,
-                  ),
-                  itemCount: services.length,
-                  itemBuilder: (context, index) {
-                    return PropertyServicesCard(
-                        service: services[index]['service'],
-                        amount: services[index]['amount']);
-                  },
-                )
+                // const SizedBox(height: gap * 2),
+                // const Text(
+                //   'Other Services',
+                //   style: TextStyle(
+                //     fontWeight: FontWeight.bold,
+                //   ),
+                // ),
+                // GridView.builder(
+                //   physics: const ScrollPhysics(),
+                //   scrollDirection: Axis.vertical,
+                //   shrinkWrap: true,
+                //   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                //     crossAxisCount: 2,
+                //     mainAxisSpacing: 0.2,
+                //     crossAxisSpacing: 0.2,
+                //   ),
+                //   itemCount: services.length,
+                //   itemBuilder: (context, index) {
+                //     return PropertyServicesCard(
+                //         service: services[index]['service'],
+                //         amount: services[index]['amount']);
+                //   },
+                // )
               ],
             ),
           ),

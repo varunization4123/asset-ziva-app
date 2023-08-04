@@ -1,5 +1,6 @@
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
+import 'package:asset_ziva/utils/utils.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:asset_ziva/provider/auth_provider.dart';
@@ -105,14 +106,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       borderSide: const BorderSide(color: borderColor),
                     ),
                     prefixIcon: Container(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12.0,
+                        vertical: 12.0,
+                      ),
                       child: InkWell(
                         onTap: () {
                           showCountryPicker(
                               context: context,
                               countryListTheme: CountryListThemeData(
                                 borderRadius: BorderRadius.circular(10),
-                                bottomSheetHeight: 550,
+                                bottomSheetHeight: 400,
                               ),
                               onSelect: (value) {
                                 setState(() {
@@ -165,7 +169,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   height: btnHeight,
                   child: CustomButton(
                     text: "Login",
-                    onPressed: () => sendPhoneNumber(),
+                    onPressed: () {
+                      try {
+                        sendPhoneNumber();
+                      } catch (e) {
+                        print(e);
+                        showSnackBar(context, '$e');
+                      }
+                    },
                     // onPressed: () {
                     //   Navigator.push(
                     //     context,
@@ -185,8 +196,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void sendPhoneNumber() {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
-    String phoneNumber = phoneController.text.trim();
-    ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
+    try {
+      final ap = Provider.of<AuthProvider>(context, listen: false);
+      String phoneNumber = phoneController.text.trim();
+      ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
+    } catch (e) {
+      print(e);
+      showSnackBar(context, '$e');
+    }
   }
 }
