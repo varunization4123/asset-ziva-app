@@ -32,13 +32,13 @@ class Step {
 List<Step> getSteps() {
   return [
     Step('I have made a payment, where can I see my services?',
-        'Install Flutter development tools according to the official documentation.'),
+        ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat'),
     Step(
         'Money has been deducted from account, but the service hasn\'t been added to my profile',
-        'Open your terminal, run `flutter create <project_name>` to create a new project.'),
+        ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'),
     Step(
         'I have uploaded the wrong documents for the service, how do i change it?',
-        'Change your terminal directory to the project directory, enter `flutter run`.'),
+        ' Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'),
   ];
 }
 
@@ -79,7 +79,10 @@ class _StepsState extends State<Steps> {
             );
           },
           body: ListTile(
-            title: Text(step.body),
+            title: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text(step.body),
+            ),
           ),
           isExpanded: step.isExpanded,
         );

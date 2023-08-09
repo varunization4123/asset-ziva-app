@@ -30,7 +30,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               children: [
                 Image.asset(
                   "assets/assetziva_logo.png",
-                  height: 150,
+                  height: 100,
+                  width: MediaQuery.of(context).size.width * 0.6,
                 ),
                 const SizedBox(height: gap),
                 const Text(

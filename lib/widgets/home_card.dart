@@ -38,7 +38,7 @@ class HomeCard extends StatelessWidget {
             elevation: 6,
             child: Stack(
               children: [
-                Image.network(
+                Image.asset(
                   cardImg,
                   width: 200,
                   height: 200,

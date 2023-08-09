@@ -2,39 +2,130 @@ import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/vendor_card.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
-class VendorScreen extends StatelessWidget {
+class VendorScreen extends StatefulWidget {
   const VendorScreen({super.key});
+
+  @override
+  State<VendorScreen> createState() => _VendorScreenState();
+}
+
+class _VendorScreenState extends State<VendorScreen> {
+  String? _currentAddress;
+  Position? _currentPosition;
+
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
+      }
+    }
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
+    }
+    return true;
+  }
+
+  Future<void> _getCurrentPosition() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) return;
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      _getAddressFromLatLng(_currentPosition!);
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  Future<void> _getAddressFromLatLng(Position position) async {
+    await placemarkFromCoordinates(
+            _currentPosition!.latitude, _currentPosition!.longitude)
+        .then((List<Placemark> placemarks) {
+      Placemark place = placemarks[0];
+      setState(() {
+        _currentAddress = '${place.subAdministrativeArea}, ${place.postalCode}';
+      });
+    }).catchError((e) {
+      debugPrint(e);
+    });
+  }
+
+  @override
+  void initState() {
+    _getCurrentPosition();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        foregroundColor: inputColor,
-        elevation: 0,
-        centerTitle: true,
-        leading: TextButton(
-          child: const Text(
-            'Back',
-            style: TextStyle(color: inputColor),
+        backgroundColor: backgroundColor,
+        elevation: 1,
+        toolbarHeight: 72.0,
+        centerTitle: false,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_ios,
           ),
-          onPressed: () => Navigator.pop(context),
+          color: secondaryColor,
         ),
-        leadingWidth: 60,
-        title: const Text(
-          "Vendors",
-          style: TextStyle(color: inputColor, fontSize: h1),
-        ),
-        actions: [
-          TextButton(
-            child: const Text(
-              "Help",
-              style: TextStyle(color: inputColor),
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Icon(
+              Icons.location_on,
+              color: primaryColor,
+              size: 30.0,
             ),
-            onPressed: () {},
-          ),
-        ],
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Selected Location',
+                  style: TextStyle(color: secondaryColor, fontSize: p),
+                  textAlign: TextAlign.left,
+                ),
+                _currentAddress != Null
+                    ? Text(
+                        _currentAddress ?? "",
+                        style: const TextStyle(
+                          color: secondaryColor,
+                          fontSize: subP,
+                        ),
+                        textAlign: TextAlign.left,
+                      )
+                    : const CircularProgressIndicator(
+                        color: primaryColor,
+                      )
+              ],
+            ),
+          ],
+        ),
       ),
       body: GridView(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -48,42 +139,42 @@ class VendorScreen extends StatelessWidget {
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Fencing',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-fencing.png",
             ),
           ),
           InkWell(
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Painting',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-painting.png",
             ),
           ),
           InkWell(
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Water Connection',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-plumbing.png",
             ),
           ),
           InkWell(
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Construction',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-construction.png",
             ),
           ),
           InkWell(
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Civil Work',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-construction.png",
             ),
           ),
           InkWell(
             onTap: () => {},
             child: const VendorCard(
               cardText: 'Lawyers',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: "assets/property-lawyers.png",
             ),
           ),
         ],

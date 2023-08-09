@@ -6,9 +6,13 @@ import 'package:flutter/material.dart';
 class PropertyServicesCard extends StatefulWidget {
   final String service;
   final int amount;
+  final String? image;
 
   const PropertyServicesCard(
-      {super.key, required this.service, required this.amount});
+      {super.key,
+      required this.service,
+      required this.amount,
+      required this.image});
 
   @override
   State<PropertyServicesCard> createState() => _PropertyServicesCardState();
@@ -60,11 +64,11 @@ class _PropertyServicesCardState extends State<PropertyServicesCard> {
         child: Container(
           padding: const EdgeInsets.all(12.0),
           decoration: BoxDecoration(
-            color: primaryColor.withOpacity(0.35),
+            color: primaryColor.withOpacity(0.05),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
               width: 1.0,
-              color: borderColor,
+              color: primaryColor,
             ),
             boxShadow: [
               BoxShadow(
@@ -76,53 +80,69 @@ class _PropertyServicesCardState extends State<PropertyServicesCard> {
             ],
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                '₹ ${widget.amount}',
-                style: const TextStyle(
-                  fontSize: p + 4,
-                  fontWeight: FontWeight.bold,
-                  color: backgroundColor,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(0, 0.0),
-                      blurRadius: 20.0,
-                      color: Color.fromARGB(166, 27, 27, 27),
+              widget.image == null
+                  ? const CircularProgressIndicator()
+                  : Padding(
+                      padding: const EdgeInsets.only(top: 6.0),
+                      child: Image.asset(
+                        '${widget.image}',
+                        height: 60,
+                        width: 60,
+                      ),
                     ),
-                    Shadow(
-                      offset: Offset(0, 0.0),
-                      blurRadius: 8.0,
-                      color: Color.fromARGB(185, 27, 27, 27),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '₹ ${widget.amount}',
+                    style: const TextStyle(
+                      fontSize: p + 4,
+                      fontWeight: FontWeight.bold,
+                      color: primaryColor,
+                      // shadows: <Shadow>[
+                      //   Shadow(
+                      //     offset: Offset(0, 0.0),
+                      //     blurRadius: 20.0,
+                      //     color: Color.fromARGB(166, 27, 27, 27),
+                      //   ),
+                      //   Shadow(
+                      //     offset: Offset(0, 0.0),
+                      //     blurRadius: 8.0,
+                      //     color: Color.fromARGB(185, 27, 27, 27),
+                      //   ),
+                      // ],
                     ),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: gap,
-              ),
-              Text(
-                widget.service,
-                textAlign: TextAlign.start,
-                overflow: TextOverflow.clip,
-                style: const TextStyle(
-                  fontSize: p,
-                  color: backgroundColor,
-                  fontWeight: FontWeight.bold,
-                  shadows: <Shadow>[
-                    Shadow(
-                      offset: Offset(0, 0.0),
-                      blurRadius: 20.0,
-                      color: Color.fromARGB(166, 27, 27, 27),
+                  ),
+                  const SizedBox(
+                    height: gap / 4,
+                  ),
+                  Text(
+                    widget.service,
+                    textAlign: TextAlign.start,
+                    overflow: TextOverflow.clip,
+                    style: const TextStyle(
+                      fontSize: p,
+                      color: primaryColor,
+                      fontWeight: FontWeight.bold,
+                      // shadows: <Shadow>[
+                      //   Shadow(
+                      //     offset: Offset(0, 0.0),
+                      //     blurRadius: 20.0,
+                      //     color: Color.fromARGB(166, 27, 27, 27),
+                      //   ),
+                      //   Shadow(
+                      //     offset: Offset(0, 0.0),
+                      //     blurRadius: 8.0,
+                      //     color: Color.fromARGB(185, 27, 27, 27),
+                      //   ),
+                      // ],
                     ),
-                    Shadow(
-                      offset: Offset(0, 0.0),
-                      blurRadius: 8.0,
-                      color: Color.fromARGB(185, 27, 27, 27),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

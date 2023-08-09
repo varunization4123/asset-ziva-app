@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: const HomeCard(
               cardText: 'Property Management',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: 'assets/property-management.png',
             ),
           ),
           InkWell(
@@ -71,7 +71,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: const HomeCard(
               cardText: 'Plot Management',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: 'assets/plot-management.png',
             ),
           ),
           InkWell(
@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: const HomeCard(
               cardText: 'Vendors',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: 'assets/vendors.png',
             ),
           ),
           InkWell(
@@ -93,7 +93,7 @@ class HomeScreen extends StatelessWidget {
             },
             child: const HomeCard(
               cardText: 'Real Estate Services',
-              cardImg: 'https://assetziva.com/images/property-fencing.jpg',
+              cardImg: 'assets/real-estate-services.png',
             ),
           ),
         ],

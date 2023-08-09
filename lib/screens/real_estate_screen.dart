@@ -68,8 +68,10 @@ class RealEstateScreen extends StatelessWidget {
                 itemCount: services.length,
                 itemBuilder: (context, index) {
                   return PropertyServicesCard(
-                      service: services[index]['service'],
-                      amount: services[index]['amount']);
+                    service: services[index]['service'],
+                    amount: services[index]['amount'],
+                    image: services[index]['image'],
+                  );
                 },
               )
             ],

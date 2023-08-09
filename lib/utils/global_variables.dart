@@ -35,77 +35,96 @@ List<Map> services = [
   {
     "service": "EC Digital",
     "amount": 2000,
+    "image": 'assets/ec-digital.png',
   },
   {
     "service": "EC Manual",
     "amount": 2500,
+    "image": 'assets/ec-manual.png',
   },
   {
     "service": "Sale Deed (Certified Copy)",
     "amount": 2250,
+    "image": 'assets/sale-deed.png',
   },
   {
     "service": "Mother Deed (Certified Copy)",
     "amount": 2250,
+    "image": 'assets/mother-deed.png',
   },
   {
     "service": "Link Deeds",
     "amount": 2500,
+    "image": 'assets/link-deeds.png',
   },
   {
     "service": "RTC/Phani Manual",
     "amount": 3500,
+    "image": 'assets/rtc-phani-manual.png',
   },
   {
     "service": "RTC/Phani Digital",
     "amount": 1500,
+    "image": 'assets/rtc-digital-phani.png',
   },
   {
     "service": "Khata/Patta/Mutation Records",
     "amount": 30000,
+    "image": 'assets/khata-patta-mutation-records.png',
   },
   {
     "service": "Property Tax",
     "amount": 1000,
+    "image": 'assets/property-tax.png',
   },
   {
     "service": "Survey Maps",
     "amount": 1000,
+    "image": 'assets/survey-maps.png',
   },
   {
     "service": "Legal Opinion",
     "amount": 3000,
+    "image": 'assets/legal-opinion.png',
   },
   {
     "service": "Legal Opinion Detailed",
     "amount": 5000,
+    "image": 'assets/legal-opinion-detailed.png',
   },
   {
     "service": "Legal Second Opinion",
     "amount": 4000,
+    "image": 'assets/legal-second-opinion.png',
   },
   {
     "service": "Revenue Records",
     "amount": 1000,
+    "image": 'assets/revenue-records.png',
   },
   {
     "service": "Land Conversion/Change of Land use",
     "amount": 550000,
+    "image": 'assets/land-conversion.png',
   },
   {
     "service": "Khata Extract",
     "amount": 3000,
+    "image": 'assets/khata-extract.png',
   },
   {
     "service": "NOCs",
     "amount": 5000,
+    "image": 'assets/nocs.png',
   },
   {
     "service": "Survey Records",
     "amount": 30000,
+    "image": 'assets/survey-records.png',
   },
   {
     "service": "Property Search",
     "amount": 1000,
+    "image": 'assets/property-search.png',
   },
 ];
