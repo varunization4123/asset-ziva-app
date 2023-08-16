@@ -128,3 +128,198 @@ List<Map> services = [
     "image": 'assets/property-search.png',
   },
 ];
+
+List<Map> vendors = [
+  {
+    "vendor": "Construction",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Painting",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Gardening",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "R-E Agent",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Nursery",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Architect",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Interiors",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Solar Solutions",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Landscaping",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Plumbing",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Electrical",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "JCB",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Surveying",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Contractor",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Mason",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Loan Agents",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Bank Collaboration",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Metals",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Hardware",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Bricks Dealers",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Cement Dealers",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Wood Dealers",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Flooring",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Tiles & Ceramics",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Handlooms",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Furniture",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Welding",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Fabrication",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Tank Cleaning",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Waterproofing",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Water Treatment",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Pool Construction",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "M-Sand / P-Sand",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Key making",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Air Conditioning",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Scrap Dealers",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Demolishers",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Pest Control",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Vastu Consultant",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Logistics",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Labour Contractor",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Lift/Technicians",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Marbles & Granites",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Lighting",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Chimney",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "CCTV",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "Borewell",
+    "image": 'assets/ec-digital.png',
+  },
+  {
+    "vendor": "UPS Services",
+    "image": 'assets/ec-digital.png',
+  },
+];

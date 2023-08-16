@@ -49,11 +49,13 @@ class VendorCard extends StatelessWidget {
               elevation: 6,
               child: Stack(
                 children: [
-                  Image.asset(
-                    cardImg,
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.fill,
+                  Center(
+                    child: Image.asset(
+                      cardImg,
+                      width: 60,
+                      height: 60,
+                      fit: BoxFit.fill,
+                    ),
                   ),
                   Container(
                     width: double.infinity,

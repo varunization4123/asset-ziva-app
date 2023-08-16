@@ -27,6 +27,8 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
   Position? _currentPosition;
   String? _currentPincode;
   bool showMap = true;
+  List picodeAsArray = [];
+  String? _currentCity;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -78,6 +80,9 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
       setState(() {
         _currentAddress = '${place.subAdministrativeArea}, ${place.postalCode}';
         _currentPincode = '${place.postalCode}';
+        String subAdministrativeArea = '${place.subAdministrativeArea}';
+        _currentCity = subAdministrativeArea.substring(0, 3);
+        print(_currentCity);
       });
     }).catchError((e) {
       debugPrint(e);
@@ -86,8 +91,21 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
 
   @override
   void initState() {
-    _getCurrentPosition();
+    initialize();
     super.initState();
+  }
+
+  Future matchingPincode() async {
+    String pincode = _currentPincode!;
+    for (var i = 0; i < pincode.length; i++) {
+      picodeAsArray.add(pincode[i]);
+    }
+    print(picodeAsArray);
+  }
+
+  Future initialize() async {
+    await _getCurrentPosition();
+    await matchingPincode();
   }
 
   @override
@@ -213,7 +231,7 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
                             borderRadius: BorderRadius.circular(15.0),
                           ),
                           width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.width / 2,
+                          height: MediaQuery.of(context).size.width / 1.65,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(15),
                             child: GoogleMap(
@@ -246,11 +264,15 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
                     stream: FirebaseFirestore.instance
                         .collection('vendors')
                         .where('service', isEqualTo: widget.service)
-                        .where('pincode', isEqualTo: _currentPincode)
+                        .where('city', isGreaterThanOrEqualTo: _currentCity)
                         .snapshots(),
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                             snapshot) {
+                      if (snapshot.hasError) {
+                        print(snapshot.error);
+                        return Text('Error: ${snapshot.error}');
+                      }
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const CircularProgressIndicator(
                           color: primaryColor,
@@ -265,7 +287,9 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
                           ),
                         );
                       }
+
                       print('${snapshot.data!.docs.length} Vendors found');
+
                       return ListView.builder(
                           shrinkWrap: true,
                           itemCount: snapshot.data!.docs.length,
@@ -280,7 +304,9 @@ class _VendorServiceScreenState extends State<VendorServiceScreen> {
           ),
           floatingActionButton: CustomButton(
             text: 'Add Service',
-            onPressed: () {},
+            onPressed: () {
+              matchingPincode();
+            },
           )),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
+import 'package:asset_ziva/utils/global_variables.dart';
 import 'package:asset_ziva/widgets/vendor_card.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -127,57 +128,65 @@ class _VendorScreenState extends State<VendorScreen> {
           ],
         ),
       ),
-      body: GridView(
+      body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           mainAxisSpacing: 0.2,
           crossAxisSpacing: 0.2,
         ),
         shrinkWrap: true,
-        children: [
-          InkWell(
+        itemCount: vendors.length,
+        itemBuilder: (context, index) {
+          return InkWell(
             onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Fencing',
-              cardImg: "assets/property-fencing.png",
+            child: VendorCard(
+              cardText: vendors[index]['vendor'],
+              cardImg: vendors[index]['image'],
             ),
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Painting',
-              cardImg: "assets/property-painting.png",
-            ),
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Water Connection',
-              cardImg: "assets/property-plumbing.png",
-            ),
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Construction',
-              cardImg: "assets/property-construction.png",
-            ),
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Civil Work',
-              cardImg: "assets/property-construction.png",
-            ),
-          ),
-          InkWell(
-            onTap: () => {},
-            child: const VendorCard(
-              cardText: 'Lawyers',
-              cardImg: "assets/property-lawyers.png",
-            ),
-          ),
-        ],
+          );
+        },
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Fencing',
+        //     cardImg: "assets/property-fencing.png",
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Painting',
+        //     cardImg: "assets/property-painting.png",
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Water Connection',
+        //     cardImg: "assets/property-plumbing.png",
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Construction',
+        //     cardImg: "assets/property-construction.png",
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Civil Work',
+        //     cardImg: "assets/property-construction.png",
+        //   ),
+        // ),
+        // InkWell(
+        //   onTap: () => {},
+        //   child: const VendorCard(
+        //     cardText: 'Lawyers',
+        //     cardImg: "assets/property-lawyers.png",
+        //   ),
+        // ),
       ),
     );
   }

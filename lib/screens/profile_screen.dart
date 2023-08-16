@@ -129,12 +129,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ));
                       },
                     ),
-                    const SizedBox(height: gap),
-                    SingleChildScrollView(
-                      child: AddNewPropertyButton(
-                        propertyId: ap.userModel.uid,
-                      ),
-                    ),
+                    // const SizedBox(height: gap),
+                    // SingleChildScrollView(
+                    //   child: AddNewPropertyButton(
+                    //     propertyId: ap.userModel.uid,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -169,11 +169,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                     ),
                     const SizedBox(height: gap),
-                    SingleChildScrollView(
-                      child: AddNewPlotButton(
-                        plotId: ap.userModel.uid,
-                      ),
-                    ),
+                    // SingleChildScrollView(
+                    //   child: AddNewPlotButton(
+                    //     plotId: ap.userModel.uid,
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
