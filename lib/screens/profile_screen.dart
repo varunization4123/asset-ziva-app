@@ -1,7 +1,5 @@
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
-import 'package:asset_ziva/widgets/add_new_plot_button.dart';
-import 'package:asset_ziva/widgets/add_new_property_button.dart';
 import 'package:asset_ziva/widgets/plot_card.dart';
 import 'package:asset_ziva/widgets/prop_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
