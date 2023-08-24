@@ -175,6 +175,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
               ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Your Services'),
+                    const SizedBox(height: gap),
+                    StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('services')
+                          .where('uid', isEqualTo: ap.userModel.phoneNumber)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                              snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator(
+                            color: primaryColor,
+                          );
+                        }
+                        return ListView.builder(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) => PropertyCard(
+                                  snap: snapshot.data!.docs[index].data(),
+                                ));
+                      },
+                    ),
+                    // const SizedBox(height: gap),
+                    // SingleChildScrollView(
+                    //   child: AddNewPropertyButton(
+                    //     propertyId: ap.userModel.uid,
+                    //   ),
+                    // ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

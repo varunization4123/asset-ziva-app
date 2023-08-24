@@ -18,12 +18,16 @@ class FirestoreMethods extends ChangeNotifier {
     BuildContext context,
     // Uint8List img,
     String propertyName,
+    String propertyType,
+    String client,
     String propertyAddress,
     String city,
     String state,
     String propertyArea,
     String pinCode,
     String uid,
+    String registeredOn,
+    String status,
     // Function onSuccess,
   ) async {
     String res = "Something went wrong";
@@ -35,6 +39,8 @@ class FirestoreMethods extends ChangeNotifier {
 
       PropertyModel propertyModel = PropertyModel(
         propertyName: propertyName,
+        propertyType: propertyType,
+        client: client,
         propertyAddress: propertyAddress,
         propertyId: propertyId,
         city: city,
@@ -43,6 +49,8 @@ class FirestoreMethods extends ChangeNotifier {
         pinCode: pinCode,
         // propertyUrl: propertyUrl,
         uid: uid,
+        registeredOn: registeredOn,
+        status: status,
       );
 
       _firestore

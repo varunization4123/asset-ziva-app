@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:asset_ziva/model/plot_services_model.dart';
 import 'package:asset_ziva/model/property_services_model.dart';
 import 'package:asset_ziva/provider/auth_provider.dart';
 import 'package:asset_ziva/utils/colors.dart';
@@ -229,7 +230,8 @@ class _AddServiceFormState extends State<AddServiceForm> {
                       : CustomButton(
                           text: "Add Service",
                           onPressed: () {
-                            if (property != null && file != null) {
+                            if (property != null ||
+                                plot != null && file != null) {
                               Razorpay razorpay = Razorpay();
                               var options = {
                                 'key': 'rzp_live_ILgsfZCZoFIKMb',
@@ -255,7 +257,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
                               razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
                                   handleExternalWalletSelected);
                               razorpay.open(options);
-                            } else if (property == null) {
+                            } else if (property == null || plot == null) {
                               showSnackBar(context, 'Please select the Plot');
                             } else {
                               showSnackBar(context, 'Please select a file');
@@ -351,28 +353,54 @@ class _AddServiceFormState extends State<AddServiceForm> {
   // store service file document to database
   void storeFile() async {
     final ap = Provider.of<AuthProvider>(context, listen: false);
-    PropertyServicesModel propertyServicesModel = PropertyServicesModel(
-      service: widget.service,
-      amount: widget.amount.toString(),
-      city: 'Property $property',
-      document: "",
-      propertyId: propertyId,
-      uid: '',
-      paymentId: paymentId!,
-    );
-    print('storeFile triggered');
-    ap.savePropertyServiceToFirebase(
-      propertyId: propertyId,
-      context: context,
-      propertyServicesModel: propertyServicesModel,
-      document: file!,
-      onSuccess: () {
-        ap.saveUserDataToSP().then(
-              (value) => ap.setSignIn().then(
-                    (value) => Navigator.pop(context),
-                  ),
-            );
-      },
-    );
+    if (property != null) {
+      PropertyServicesModel propertyServicesModel = PropertyServicesModel(
+        service: widget.service,
+        amount: widget.amount.toString(),
+        city: 'Property $property',
+        document: "",
+        propertyId: propertyId,
+        uid: '',
+        paymentId: paymentId!,
+      );
+      print('Property storeFile triggered');
+      ap.savePropertyServiceToFirebase(
+        propertyId: propertyId,
+        context: context,
+        propertyServicesModel: propertyServicesModel,
+        document: file!,
+        onSuccess: () {
+          ap.saveUserDataToSP().then(
+                (value) => ap.setSignIn().then(
+                      (value) => Navigator.pop(context),
+                    ),
+              );
+        },
+      );
+    } else if (plot != null) {
+      PlotServicesModel plotServicesModel = PlotServicesModel(
+        service: widget.service,
+        amount: widget.amount.toString(),
+        city: 'Plot $plot',
+        document: "",
+        plotId: plotId,
+        uid: '',
+        paymentId: paymentId!,
+      );
+      print('Plot storeFile triggered');
+      ap.savePlotServiceToFirebase(
+        plotId: plotId,
+        context: context,
+        plotServicesModel: plotServicesModel,
+        document: file!,
+        onSuccess: () {
+          ap.saveUserDataToSP().then(
+                (value) => ap.setSignIn().then(
+                      (value) => Navigator.pop(context),
+                    ),
+              );
+        },
+      );
+    }
   }
 }

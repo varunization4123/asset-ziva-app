@@ -18,6 +18,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController phoneController = TextEditingController();
   bool errorText = true;
   String verifyNumber = 'invalid mobile number';
+  bool isLoading = false;
 
   Country selectedCountry = Country(
     phoneCode: "91",
@@ -170,11 +171,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: CustomButton(
                     text: "Login",
                     onPressed: () {
-                      try {
-                        sendPhoneNumber();
-                      } catch (e) {
-                        print(e);
-                        showSnackBar(context, '$e');
+                      if (phoneController.text.length >= 9) {
+                        try {
+                          setState(() {
+                            isLoading = true;
+                          });
+                          sendPhoneNumber();
+                        } catch (e) {
+                          print(e);
+                          showSnackBar(context, '$e');
+                          setState(() {
+                            isLoading = false;
+                          });
+                        }
                       }
                     },
                     // onPressed: () {

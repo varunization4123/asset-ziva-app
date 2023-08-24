@@ -3,6 +3,7 @@ import 'package:asset_ziva/screens/help_screen.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/add_new_plot_button.dart';
+import 'package:asset_ziva/widgets/membership_pricing.dart';
 import 'package:asset_ziva/widgets/plot_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class PlotScreen extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    MembershipPricing(),
                     const Text(
                       'Your Plots',
                       style: TextStyle(

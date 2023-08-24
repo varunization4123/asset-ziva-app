@@ -5,6 +5,7 @@ import 'package:asset_ziva/screens/vendor_screen.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/home_card.dart';
+import 'package:asset_ziva/widgets/custom_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -19,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String? _currentAddress;
   Position? _currentPosition;
+  TextEditingController searchController = TextEditingController();
+  bool isSearching = false;
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -81,6 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   super.dispose();
+  // }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -118,65 +127,91 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: primaryColor,
                           strokeWidth: 2.5,
                         ),
-                      )
+                      ),
               ],
             ),
           ],
         ),
       ),
-      body: GridView(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          mainAxisSpacing: 0.2,
-          crossAxisSpacing: 0.2,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
+              child: CustomSearchBar(
+                hintText: 'Search',
+                inputType: TextInputType.name,
+                maxLines: 1,
+                controller: searchController,
+                controllerAction: () {
+                  searchController.clear();
+                },
+              ),
+            ),
+            GridView(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 0.2,
+                crossAxisSpacing: 0.2,
+              ),
+              shrinkWrap: true,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PropertyScreen()));
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: const HomeCard(
+                    cardText: 'Property Management',
+                    cardImg: 'assets/property-management.png',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const PlotScreen()));
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: const HomeCard(
+                    cardText: 'Plot Management',
+                    cardImg: 'assets/plot-management.png',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const VendorScreen()));
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: const HomeCard(
+                    cardText: 'Vendors',
+                    cardImg: 'assets/vendors.png',
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const RealEstateScreen()));
+                    FocusScope.of(context).requestFocus(new FocusNode());
+                  },
+                  child: const HomeCard(
+                    cardText: 'Real Estate Services',
+                    cardImg: 'assets/real-estate-services.png',
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
-        shrinkWrap: true,
-        children: [
-          InkWell(
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const PropertyScreen()))
-            },
-            child: const HomeCard(
-              cardText: 'Property Management',
-              cardImg: 'assets/property-management.png',
-            ),
-          ),
-          InkWell(
-            onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const PlotScreen()))
-            },
-            child: const HomeCard(
-              cardText: 'Plot Management',
-              cardImg: 'assets/plot-management.png',
-            ),
-          ),
-          InkWell(
-            onTap: () => {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => const VendorScreen()))
-            },
-            child: const HomeCard(
-              cardText: 'Vendors',
-              cardImg: 'assets/vendors.png',
-            ),
-          ),
-          InkWell(
-            onTap: () => {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const RealEstateScreen()))
-            },
-            child: const HomeCard(
-              cardText: 'Real Estate Services',
-              cardImg: 'assets/real-estate-services.png',
-            ),
-          ),
-        ],
       ),
     ));
   }

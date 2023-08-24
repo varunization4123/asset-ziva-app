@@ -4,13 +4,16 @@ import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/utils.dart';
 import 'package:asset_ziva/widgets/custom_button.dart';
 import 'package:asset_ziva/widgets/custom_text_field.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dotted_border/dotted_border.dart';
 
 class AddNewPropertyButton extends StatefulWidget {
   final String propertyId;
-  const AddNewPropertyButton({super.key, required this.propertyId});
+  final String client;
+  const AddNewPropertyButton(
+      {super.key, required this.propertyId, required this.client});
 
   @override
   State<AddNewPropertyButton> createState() => _AddNewPropertyButtonState();
@@ -21,8 +24,20 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
   final TextEditingController propertyAddress = TextEditingController();
   final TextEditingController propertyArea = TextEditingController();
   final TextEditingController pinCode = TextEditingController();
-  late String city = 'Bangalore';
-  late String state = 'Karnataka';
+  late String city = 'City';
+  late String state = 'State';
+  late String propertyType = 'Independent House';
+  String status = "Active";
+  static int timestamp = DateTime.now().millisecondsSinceEpoch;
+  static DateTime date = DateTime.fromMillisecondsSinceEpoch(timestamp);
+  static String registeredOn = date.year.toString() +
+      "/" +
+      date.month.toString() +
+      "/" +
+      date.day.toString();
+
+  List<String> cities = ['City'];
+  List<String> states = ['State'];
 
   void createProperty({
     required String uid,
@@ -34,12 +49,16 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
         context,
         // propertyImage!,
         propertyName.text,
+        propertyType,
+        widget.client,
         propertyAddress.text,
         city,
         state,
         propertyArea.text,
         pinCode.text,
         uid,
+        registeredOn,
+        status,
       );
 
       propertyAddress.clear();
@@ -56,6 +75,37 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
     } catch (e) {
       showSnackBar(context, e.toString());
       print(e);
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fetchDataFromFirestore();
+    super.initState();
+  }
+
+  Future<void> fetchDataFromFirestore() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await FirebaseFirestore.instance.collection('cities').get();
+      List<String> citiesFirestore;
+      List<String> statesFirestore;
+      citiesFirestore = querySnapshot.docs.map((DocumentSnapshot document) {
+        return document.get('city') as String;
+      }).toList();
+      Set<String> getStates = Set<String>();
+      querySnapshot.docs.map((DocumentSnapshot document) {
+        String fieldValue = document.get('state');
+        getStates.add(fieldValue);
+      }).toList();
+      setState(() {
+        cities.addAll(citiesFirestore);
+        statesFirestore = getStates.toList();
+        states.addAll(statesFirestore);
+      }); // Trigger a rebuild to update the UI
+    } catch (e) {
+      print('Error fetching data: $e');
     }
   }
 
@@ -100,6 +150,26 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
                 maxLines: 1,
                 controller: propertyName,
               ),
+              CustomDropdownButton<String>(
+                hintText: "PropertyType",
+                options: const [
+                  "Independent House",
+                  "Apartment",
+                  "Industrial Land",
+                  "Mixed Use Land",
+                  "Agriculture Land",
+                  "Commercial Land",
+                  "Residential",
+                ],
+                value: propertyType,
+                onChanged: (String? value) {
+                  setState(() {
+                    propertyType = value!;
+                    // state.didChange(newValue);
+                  });
+                },
+                getLabel: (String? value) => value!,
+              ),
               CustomTextField(
                 hintText: 'Property/Plot Address',
                 inputType: TextInputType.name,
@@ -107,17 +177,18 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
                 controller: propertyAddress,
               ),
               CustomDropdownButton<String>(
-                hintText: "City",
-                options: const [
-                  "Bangalore",
-                  "Hyderabad",
-                  "Mumbai",
-                  "Kolkata",
-                  "Chennai",
-                  "Coimbatore",
-                  "Pune",
-                  "Delhi"
-                ],
+                hintText: "Choose City",
+                options: cities,
+                // options: const [
+                //   "Bangalore",
+                //   "Hyderabad",
+                //   "Mumbai",
+                //   "Kolkata",
+                //   "Chennai",
+                //   "Coimbatore",
+                //   "Pune",
+                //   "Delhi"
+                // ],
                 value: city,
                 onChanged: (String? value) {
                   setState(() {
@@ -128,17 +199,18 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
                 getLabel: (String? value) => value!,
               ),
               CustomDropdownButton<String>(
-                hintText: "State",
-                options: const [
-                  "Karnataka",
-                  "Telangana",
-                  "Maharashtra",
-                  "West Bengal",
-                  "Tamil Nadu",
-                  "Kerala",
-                  "Uttar Pradesh",
-                  "Delhi"
-                ],
+                hintText: "Choose State",
+                options: states,
+                // options: const [
+                //   "Karnataka",
+                //   "Telangana",
+                //   "Maharashtra",
+                //   "West Bengal",
+                //   "Tamil Nadu",
+                //   "Kerala",
+                //   "Uttar Pradesh",
+                //   "Delhi"
+                // ],
                 value: state,
                 onChanged: (String? value) {
                   setState(() {
