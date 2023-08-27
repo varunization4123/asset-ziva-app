@@ -173,6 +173,7 @@ class AuthProvider extends ChangeNotifier {
         // createdAt: snapshot['createdAt'],
         // bio: snapshot['bio'],
         uid: snapshot['uid'],
+        gst: snapshot['gst'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
         services: snapshot['services'],
@@ -215,9 +216,9 @@ class AuthProvider extends ChangeNotifier {
 
       // uploading to database
       await _firebaseFirestore
-          .collection("properties")
-          .doc(propertyId)
-          .collection("services")
+          // .collection("properties")
+          // .doc(propertyId)
+          .collection("service requests")
           .doc(serviceId)
           .set(propertyServicesModel.toMap())
           .then((value) {
@@ -257,9 +258,9 @@ class AuthProvider extends ChangeNotifier {
 
       // uploading to database
       await _firebaseFirestore
-          .collection("plots")
-          .doc(plotId)
-          .collection("services")
+          // .collection("plots")
+          // .doc(plotId)
+          .collection("service requests")
           .doc(serviceId)
           .set(plotServicesModel.toMap())
           .then((value) {
@@ -293,6 +294,7 @@ class AuthProvider extends ChangeNotifier {
         // createdAt: snapshot['createdAt'],
         // bio: snapshot['bio'],
         uid: snapshot['uid'],
+        gst: snapshot['gst'],
         profilePic: snapshot['profilePic'],
         phoneNumber: snapshot['phoneNumber'],
         services: snapshot['services'],

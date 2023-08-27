@@ -1,5 +1,6 @@
 class PlotServicesModel {
   String service;
+  String client;
   String amount;
   String city;
   String document;
@@ -9,6 +10,7 @@ class PlotServicesModel {
 
   PlotServicesModel({
     required this.service,
+    required this.client,
     required this.amount,
     required this.city,
     required this.document,
@@ -21,6 +23,7 @@ class PlotServicesModel {
   factory PlotServicesModel.fromMap(Map<String, dynamic> map) {
     return PlotServicesModel(
       service: map['service'] ?? '',
+      client: map['client'] ?? '',
       amount: map['amount'] ?? '',
       city: map['city'] ?? '',
       document: map['document'] ?? '',
@@ -34,6 +37,7 @@ class PlotServicesModel {
   Map<String, dynamic> toMap() {
     return {
       "service": service,
+      "client": client,
       "amount": amount,
       "city": city,
       "document": document,

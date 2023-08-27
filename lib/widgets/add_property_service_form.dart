@@ -287,6 +287,7 @@ class _AddPropertyServiceFormState extends State<AddPropertyServiceForm> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     PropertyServicesModel propertyServicesModel = PropertyServicesModel(
       service: widget.service,
+      client: ap.userModel.name,
       amount: widget.amount.toString(),
       city: 'Property $property',
       document: "",

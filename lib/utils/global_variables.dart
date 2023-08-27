@@ -36,96 +36,200 @@ List<Map> services = [
     "service": "EC Digital",
     "amount": 2000,
     "image": 'assets/ec-digital.png',
+    "file": ["Sale Deed Copy"],
   },
   {
     "service": "EC Manual",
     "amount": 2500,
     "image": 'assets/ec-manual.png',
+    "file": ["Sale Deed Copy"],
   },
   {
     "service": "Sale Deed (Certified Copy)",
     "amount": 2250,
     "image": 'assets/sale-deed.png',
+    "file": ["Photo Copy of Sale Deed/Document Number"]
   },
   {
     "service": "Mother Deed (Certified Copy)",
     "amount": 2250,
     "image": 'assets/mother-deed.png',
+    "file": ["Photo Copy of Sale Deed/Document Number"]
   },
   {
     "service": "Link Deeds",
     "amount": 2500,
     "image": 'assets/link-deeds.png',
+    "file": ["Photo Copy of Sale Deed/Document Number"]
   },
   {
     "service": "RTC/Phani Manual",
     "amount": 3500,
     "image": 'assets/rtc-phani-manual.png',
+    "file": ["Village/Hobli/Taluk name and Survey No."]
   },
   {
     "service": "RTC/Phani Digital",
     "amount": 1500,
     "image": 'assets/rtc-digital-phani.png',
+    "file": ["Village/Hobli/Taluk name and Survey No."]
   },
   {
     "service": "Khata/Patta/Mutation Records",
     "amount": 30000,
     "image": 'assets/khata-patta-mutation-records.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Latest Khata & Property Tax receipt",
+      "Conversion Order (if any)",
+      "Approved Layout Plan (if any)",
+      "Approved Building Plan/Master Plan",
+      "Occupancy Certificate/CC",
+      "NOCs(if any)",
+      "Village,Hobli,Taluk names and Survey Nos.",
+      "Aadhar Card/PAN Card",
+      "Passport Size Photographs",
+      "Property Photographs",
+      "Town Planning Sanction Copy"
+    ]
   },
   {
     "service": "Property Tax",
     "amount": 1000,
     "image": 'assets/property-tax.png',
+    "file": ["Sale Deed", "EC file"]
   },
   {
     "service": "Survey Maps",
     "amount": 1000,
     "image": 'assets/survey-maps.png',
+    "file": [
+      "Village, Hobli, Taluk names and Survey Nos.",
+    ]
   },
   {
     "service": "Legal Opinion",
     "amount": 3000,
     "image": 'assets/legal-opinion.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Latest Khata & Property Tax receipt",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Legal Opinion Detailed",
     "amount": 5000,
     "image": 'assets/legal-opinion-detailed.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+      "Latest Khata & Property Tax receipt",
+      "Conversion Order(if any)",
+      "Approved Layout Plan (if any)",
+      "Approved Building Plan/Master Plan",
+      "Village, Hobli, Taluk names and Survey Nos.",
+      "Town Planning Sanction Copy",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Legal Second Opinion",
     "amount": 4000,
     "image": 'assets/legal-second-opinion.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+      "Latest Khata & Property Tax receipt",
+      "Conversion Order(if any)",
+      "Approved Layout Plan (if any)",
+      "Approved Building Plan/Master Plan",
+      "Village, Hobli, Taluk names and Survey Nos.",
+      "Town Planning Sanction Copy",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Revenue Records",
     "amount": 1000,
     "image": 'assets/revenue-records.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+      "Latest Khata & Property Tax receipt",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Land Conversion/Change of Land use",
     "amount": 550000,
     "image": 'assets/land-conversion.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+      "Latest Khata & Property Tax receipt",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Khata Extract",
     "amount": 3000,
     "image": 'assets/khata-extract.png',
+    "file": [
+      "Tax Paid Receipt",
+      "Latest Khata & Property tax receipts",
+    ]
   },
   {
     "service": "NOCs",
     "amount": 5000,
     "image": 'assets/nocs.png',
+    "file": [
+      "Sale Deed",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+    ]
   },
   {
     "service": "Survey Records",
     "amount": 30000,
     "image": 'assets/survey-records.png',
+    "file": [
+      "Sale Deed",
+      "EC file",
+      "Others-1",
+      "Linked Docs",
+      "Others-2",
+      "Latest Khata & Property Tax receipt",
+      "RTC Extracts",
+    ]
   },
   {
     "service": "Property Search",
     "amount": 1000,
     "image": 'assets/property-search.png',
+    "file": [
+      "Name (s/o, w/o etc.,) & Address",
+    ]
   },
 ];
 

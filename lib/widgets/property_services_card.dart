@@ -7,12 +7,15 @@ class PropertyServicesCard extends StatefulWidget {
   final String service;
   final int amount;
   final String? image;
+  final List file;
 
-  const PropertyServicesCard(
-      {super.key,
-      required this.service,
-      required this.amount,
-      required this.image});
+  const PropertyServicesCard({
+    super.key,
+    required this.service,
+    required this.amount,
+    required this.image,
+    required this.file,
+  });
 
   @override
   State<PropertyServicesCard> createState() => _PropertyServicesCardState();
@@ -52,9 +55,11 @@ class _PropertyServicesCardState extends State<PropertyServicesCard> {
             context: context,
             builder: (context) {
               return AlertDialog(
+                scrollable: true,
                 content: AddServiceForm(
                   service: widget.service,
                   amount: widget.amount,
+                  file: widget.file,
                 ),
               );
             })

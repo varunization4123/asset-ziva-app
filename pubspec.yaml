@@ -50,6 +50,7 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   google_maps_flutter: ^2.4.0
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -237,11 +237,20 @@ class _AddNewPropertyButtonState extends State<AddNewPropertyButton> {
           CustomButton(
             text: 'Add Property',
             onPressed: () {
-              createProperty(
-                uid: ap.userModel.phoneNumber,
-                propertyId: widget.propertyId,
-              );
-              setState(() {});
+              if (propertyName.text != "" &&
+                  propertyAddress.text != "" &&
+                  pinCode.text != "" &&
+                  propertyArea.text != "") {
+                createProperty(
+                  uid: ap.userModel.phoneNumber,
+                  propertyId: widget.propertyId,
+                );
+                setState(() {});
+              } else if (city == "City" && state == "State") {
+                showSnackBar(context, 'Please select the right option');
+              } else {
+                showSnackBar(context, 'Please enter all the fields');
+              }
             },
           )
         ],

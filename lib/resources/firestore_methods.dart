@@ -73,11 +73,15 @@ class FirestoreMethods extends ChangeNotifier {
     // Uint8List img,
     String plotName,
     String plotAddress,
+    String plotType,
+    String client,
     String city,
     String state,
     String plotArea,
     String pinCode,
     String uid,
+    String registeredOn,
+    String status,
     // Function onSuccess,
   ) async {
     String res = "Something went wrong";
@@ -90,13 +94,17 @@ class FirestoreMethods extends ChangeNotifier {
       PlotModel plotModel = PlotModel(
         plotName: plotName,
         plotAddress: plotAddress,
+        plotType: plotType,
         plotId: propertyId,
+        client: client,
         city: city,
         state: state,
         plotArea: plotArea,
         pinCode: pinCode,
         // plotUrl: plotUrl,
         uid: uid,
+        registeredOn: registeredOn,
+        status: status,
       );
 
       _firestore

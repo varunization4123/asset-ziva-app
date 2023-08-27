@@ -6,6 +6,7 @@ import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/home_card.dart';
 import 'package:asset_ziva/widgets/custom_search_bar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,6 +23,29 @@ class _HomeScreenState extends State<HomeScreen> {
   Position? _currentPosition;
   TextEditingController searchController = TextEditingController();
   bool isSearching = false;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<DocumentSnapshot> _searchResults = [];
+
+  Future<void> searchCollections(String query) async {
+    _searchResults.clear();
+
+    // Perform searches in your collections here
+    // You can use multiple queries for different collections
+    QuerySnapshot collection1Snapshot = await _firestore
+        .collection('services')
+        .where('service', isEqualTo: query)
+        .get();
+
+    QuerySnapshot collection2Snapshot = await _firestore
+        .collection('addOns')
+        .where('addOn', isEqualTo: query)
+        .get();
+
+    _searchResults.addAll(collection1Snapshot.docs);
+    _searchResults.addAll(collection2Snapshot.docs);
+
+    setState(() {});
+  }
 
   Future<bool> _handleLocationPermission() async {
     bool serviceEnabled;
@@ -136,18 +160,35 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
-              child: CustomSearchBar(
-                hintText: 'Search',
-                inputType: TextInputType.name,
-                maxLines: 1,
-                controller: searchController,
-                controllerAction: () {
-                  searchController.clear();
-                },
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.only(left: 20, right: 20, top: 14),
+            //   child: Column(
+            //     mainAxisSize: MainAxisSize.min,
+            //     children: [
+            //       CustomSearchBar(
+            //         hintText: 'Search',
+            //         inputType: TextInputType.name,
+            //         maxLines: 1,
+            //         controller: searchController,
+            //         controllerAction: () {
+            //           searchController.clear();
+            //         },
+            //       ),
+            //       // Expanded(
+            //       //   child: ListView.builder(
+            //       //     shrinkWrap: true,
+            //       //     itemCount: _searchResults.length,
+            //       //     itemBuilder: (context, index) {
+            //       //       // Build your search result list items here
+            //       //       return ListTile(
+            //       //         title: Text(_searchResults[index]['field']),
+            //       //       );
+            //       //     },
+            //       //   ),
+            //       // ),
+            //     ],
+            //   ),
+            // ),
             GridView(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,

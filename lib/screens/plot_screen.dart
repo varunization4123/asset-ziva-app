@@ -90,6 +90,7 @@ class PlotScreen extends StatelessWidget {
                     SingleChildScrollView(
                       child: AddNewPlotButton(
                         plotId: ap.userModel.phoneNumber,
+                        client: ap.userModel.name,
                       ),
                     ),
                   ],

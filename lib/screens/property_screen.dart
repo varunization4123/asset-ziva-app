@@ -5,6 +5,7 @@ import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/add_new_property_button.dart';
 import 'package:asset_ziva/widgets/membership_pricing.dart';
 import 'package:asset_ziva/widgets/prop_card.dart';
+import 'package:asset_ziva/widgets/services_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -79,6 +80,7 @@ class PropertyScreen extends StatelessWidget {
                           );
                         }
                         return ListView.builder(
+                            physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) => PropertyCard(
@@ -93,6 +95,57 @@ class PropertyScreen extends StatelessWidget {
                         client: ap.userModel.name,
                       ),
                     ),
+                    // Padding(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     vertical: 24,
+                    //   ),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       const Text(
+                    //         'Your Services',
+                    //         style: TextStyle(
+                    //           fontWeight: FontWeight.bold,
+                    //         ),
+                    //       ),
+                    //       const SizedBox(height: gap),
+                    //       StreamBuilder(
+                    //         stream: FirebaseFirestore.instance
+                    //             .collection('properties')
+                    //             .doc()
+                    //             .collection('services')
+                    //             .where('uid',
+                    //                 isEqualTo: ap.userModel.phoneNumber)
+                    //             .snapshots(),
+                    //         builder: (BuildContext context,
+                    //             AsyncSnapshot<
+                    //                     QuerySnapshot<Map<String, dynamic>>>
+                    //                 snapshot) {
+                    //           if (snapshot.connectionState ==
+                    //               ConnectionState.waiting) {
+                    //             return const CircularProgressIndicator(
+                    //               color: primaryColor,
+                    //             );
+                    //           }
+
+                    //           return ListView.builder(
+                    //               physics: const ScrollPhysics(),
+                    //               shrinkWrap: true,
+                    //               itemCount: snapshot.data!.docs.length,
+                    //               itemBuilder: (context, index) => ServicesCard(
+                    //                     snap: snapshot.data!.docs[index].data(),
+                    //                   ));
+                    //         },
+                    //       ),
+                    //       // const SizedBox(height: gap),
+                    //       // SingleChildScrollView(
+                    //       //   child: AddNewPropertyButton(
+                    //       //     propertyId: ap.userModel.uid,
+                    //       //   ),
+                    //       // ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
                 // const SizedBox(height: gap * 2),

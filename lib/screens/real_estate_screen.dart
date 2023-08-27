@@ -71,6 +71,7 @@ class RealEstateScreen extends StatelessWidget {
                     service: services[index]['service'],
                     amount: services[index]['amount'],
                     image: services[index]['image'],
+                    file: services[index]['file'],
                   );
                 },
               )

@@ -7,6 +7,7 @@ class UserModel {
   String phoneNumber;
   String uid;
   var services;
+  String gst;
 
   UserModel({
     required this.name,
@@ -16,6 +17,7 @@ class UserModel {
     // required this.createdAt,
     required this.phoneNumber,
     required this.uid,
+    required this.gst,
     required this.services,
   });
 
@@ -26,6 +28,7 @@ class UserModel {
       email: map['email'] ?? '',
       // bio: map['bio'] ?? '',
       uid: map['uid'] ?? '',
+      gst: map['gst'] ?? '',
       phoneNumber: map['phoneNumber'] ?? '',
       // createdAt: map['createdAt'] ?? '',
       profilePic: map['profilePic'] ?? '',
@@ -39,6 +42,7 @@ class UserModel {
       "name": name,
       "email": email,
       "uid": uid,
+      "gst": gst,
       // "bio": bio,
       "profilePic": profilePic,
       "phoneNumber": phoneNumber,

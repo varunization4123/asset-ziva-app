@@ -2,6 +2,7 @@ import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/plot_card.dart';
 import 'package:asset_ziva/widgets/prop_card.dart';
+import 'package:asset_ziva/widgets/services_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:asset_ziva/provider/auth_provider.dart';
@@ -159,6 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           );
                         }
                         return ListView.builder(
+                            physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) => PlotCard(
@@ -166,7 +168,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ));
                       },
                     ),
-                    const SizedBox(height: gap),
                     // SingleChildScrollView(
                     //   child: AddNewPlotButton(
                     //     plotId: ap.userModel.uid,
@@ -185,7 +186,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: gap),
                     StreamBuilder(
                       stream: FirebaseFirestore.instance
-                          .collection('services')
+                          .collection('service requests')
                           .where('uid', isEqualTo: ap.userModel.phoneNumber)
                           .snapshots(),
                       builder: (BuildContext context,
@@ -201,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             physics: const ScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) => PropertyCard(
+                            itemBuilder: (context, index) => ServicesCard(
                                   snap: snapshot.data!.docs[index].data(),
                                 ));
                       },

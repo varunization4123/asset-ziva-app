@@ -10,8 +10,8 @@ class MembershipPricing extends StatefulWidget {
 }
 
 class _MembershipPricingState extends State<MembershipPricing> {
-  bool isExpandedStd = false;
-  bool isExpandedPrm = false;
+  bool isExpandedStd = true;
+  bool isExpandedPrm = true;
   @override
   Widget build(BuildContext context) {
     return Column(

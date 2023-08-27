@@ -21,6 +21,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   File? image;
   final nameController = TextEditingController();
   final emailController = TextEditingController();
+  final gstController = TextEditingController();
   // final bioController = TextEditingController();
 
   @override
@@ -28,6 +29,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
     super.dispose();
     nameController.dispose();
     emailController.dispose();
+    gstController.dispose();
     // bioController.dispose();
   }
 
@@ -105,6 +107,15 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                             //   maxLines: 2,
                             //   controller: bioController,
                             // ),
+
+                            // gst
+                            customTextField(
+                              hintText: "GST (Optional)",
+                              // icon: Icons.email,
+                              inputType: TextInputType.number,
+                              maxLines: 1,
+                              controller: gstController,
+                            ),
                           ],
                         ),
                       ),
@@ -136,6 +147,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
       // createdAt: "",
       phoneNumber: "",
       uid: "",
+      gst: "",
       services: [],
     );
     if (image != null) {

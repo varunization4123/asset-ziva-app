@@ -1,21 +1,20 @@
-import 'package:asset_ziva/sub_screens/details_sub_screen.dart';
-import 'package:asset_ziva/sub_screens/gallery_sub_screen.dart';
 import 'package:asset_ziva/sub_screens/property_documents_sub_screen.dart';
+import 'package:asset_ziva/sub_screens/services_details_sub_screen.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/utils/utils.dart';
 import 'package:flutter/material.dart';
 
-class PlotCard extends StatefulWidget {
+class ServicesCard extends StatefulWidget {
   final Map<String, dynamic> snap;
 
-  const PlotCard({super.key, required this.snap});
+  const ServicesCard({super.key, required this.snap});
 
   @override
-  State<PlotCard> createState() => _PlotCardState();
+  State<ServicesCard> createState() => _ServicesCardState();
 }
 
-class _PlotCardState extends State<PlotCard>
+class _ServicesCardState extends State<ServicesCard>
     with SingleTickerProviderStateMixin {
   bool delete = false;
   bool isExpanded = false;
@@ -25,7 +24,7 @@ class _PlotCardState extends State<PlotCard>
   void initState() {
     // TODO: implement initState
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
   }
 
   @override
@@ -55,7 +54,7 @@ class _PlotCardState extends State<PlotCard>
               margin: const EdgeInsets.only(bottom: 10),
               color: delete == false
                   ? Colors.white
-                  : const Color.fromARGB(255, 250, 21, 5),
+                  : const Color.fromARGB(255, 255, 19, 2),
               elevation: 10,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
@@ -63,7 +62,7 @@ class _PlotCardState extends State<PlotCard>
                 padding: const EdgeInsets.all(24.0),
                 child: Center(
                   child: delete == false
-                      ? Text('Plot ${widget.snap['plotName']}')
+                      ? Text('Service ${widget.snap['service']}')
                       : Icon(
                           Icons.delete,
                           color: Colors.white,
@@ -94,9 +93,6 @@ class _PlotCardState extends State<PlotCard>
                           text: 'Details',
                         ),
                         Tab(
-                          text: 'Gallery',
-                        ),
-                        Tab(
                           text: 'Documents',
                         ),
                       ],
@@ -105,13 +101,12 @@ class _PlotCardState extends State<PlotCard>
                       height: gap,
                     ),
                     Container(
-                      height: MediaQuery.of(context).size.width * 0.5,
+                      height: MediaQuery.of(context).size.width * 0.3,
                       width: MediaQuery.of(context).size.width * 0.9,
                       child: TabBarView(
                         controller: _tabController,
                         children: [
-                          DetialsSubScreen(snap: widget.snap),
-                          GallerySubScreen(snap: widget.snap),
+                          ServicesDetialsSubScreen(snap: widget.snap),
                           PropertyDocumentsSubScreen(snap: widget.snap),
                         ],
                       ),

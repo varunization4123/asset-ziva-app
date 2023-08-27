@@ -286,6 +286,7 @@ class _AddPlotServiceFormState extends State<AddPlotServiceForm> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     PlotServicesModel plotServicesModel = PlotServicesModel(
       service: widget.service,
+      client: ap.userModel.name,
       amount: widget.amount.toString(),
       city: 'Property $plot',
       document: "",

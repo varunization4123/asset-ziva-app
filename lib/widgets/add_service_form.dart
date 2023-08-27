@@ -16,8 +16,12 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 class AddServiceForm extends StatefulWidget {
   final String service;
   final int amount;
+  final List file;
   const AddServiceForm(
-      {super.key, required this.service, required this.amount});
+      {super.key,
+      required this.service,
+      required this.amount,
+      required this.file});
 
   @override
   State<AddServiceForm> createState() => _AddServiceFormState();
@@ -31,6 +35,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
   late String plotId;
   String? paymentId;
   String serviceType = "Property";
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // for selecting file
   void selectFile() async {
@@ -43,6 +48,21 @@ class _AddServiceFormState extends State<AddServiceForm> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
+
+    Future<bool> checkServiceExists() async {
+      try {
+        QuerySnapshot<Map<String, dynamic>> snapshot = await _firestore
+            .collection('service requests')
+            .where('uid', isEqualTo: ap.userModel.phoneNumber)
+            .where('service', isEqualTo: widget.service)
+            .get();
+
+        return snapshot.docs.isNotEmpty;
+      } catch (error) {
+        print('Error checking data: $error');
+        return false;
+      }
+    }
 
     return Stack(
       children: <Widget>[
@@ -183,87 +203,102 @@ class _AddServiceFormState extends State<AddServiceForm> {
                         );
                       },
                     ),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                padding: const EdgeInsets.only(left: 8.0),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: borderColor,
-                  ),
-                  borderRadius: BorderRadius.circular(
-                    10,
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(borderColor),
-                      ),
-                      onPressed: () => selectFile(),
-                      child: const Text(
-                        'Choose File',
-                        style: TextStyle(
-                          color: secondaryColor,
+              SizedBox(
+                height: 300,
+                width: 300,
+                child: ListView.builder(
+                  itemCount: widget.file.length,
+                  itemBuilder: (context, index) {
+                    String service = widget.file[index];
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: gap,
                         ),
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
-                      child: Text('file'),
-                    ),
-                  ],
+                        Text('Choose $service :'),
+                        SizedBox(
+                          height: gap,
+                        ),
+                        Addfile(
+                          fileExists: file != null,
+                          selectFile: selectFile,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 30.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 50,
-                  child: isLoading == true
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            color: primaryColor,
-                          ),
-                        )
-                      : CustomButton(
-                          text: "Add Service",
-                          onPressed: () {
-                            if (property != null ||
-                                plot != null && file != null) {
-                              Razorpay razorpay = Razorpay();
-                              var options = {
-                                'key': 'rzp_live_ILgsfZCZoFIKMb',
-                                'amount': 500,
-                                'name': 'Asset Ziva',
-                                'description': 'Vendor Fees',
-                                'retry': {'enabled': true, 'max_count': 1},
-                                'send_sms_hash': true,
-                                'prefill': {
-                                  'contact': ap.userModel.name,
-                                  'email': ap.userModel.email,
-                                },
-                                'external': {
-                                  'wallets': ['paytm']
-                                }
-                              };
-                              razorpay.on(
-                                Razorpay.EVENT_PAYMENT_ERROR,
-                                handlePaymentErrorResponse,
-                              );
-                              razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS,
-                                  handlePaymentSuccessResponse);
-                              razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET,
-                                  handleExternalWalletSelected);
-                              razorpay.open(options);
-                            } else if (property == null || plot == null) {
-                              showSnackBar(context, 'Please select the Plot');
-                            } else {
-                              showSnackBar(context, 'Please select a file');
-                            }
-                          }),
-                ),
+              FutureBuilder(
+                future: checkServiceExists(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else {
+                    bool? alreadyExists = snapshot.data;
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 30.0),
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        child: isLoading == true
+                            ? const Center(
+                                child: CircularProgressIndicator(
+                                  color: primaryColor,
+                                ),
+                              )
+                            : CustomButton(
+                                text: alreadyExists != true
+                                    ? "Add Service"
+                                    : "Service already Exists",
+                                onPressed: () {
+                                  if (alreadyExists != true) {
+                                    if (property != null ||
+                                        plot != null && file != null) {
+                                      Razorpay razorpay = Razorpay();
+                                      var options = {
+                                        'key': 'rzp_live_ILgsfZCZoFIKMb',
+                                        'amount': 500,
+                                        'name': 'Asset Ziva',
+                                        'description': 'Vendor Fees',
+                                        'retry': {
+                                          'enabled': true,
+                                          'max_count': 1
+                                        },
+                                        'send_sms_hash': true,
+                                        'prefill': {
+                                          'contact': ap.userModel.name,
+                                          'email': ap.userModel.email,
+                                        },
+                                        'external': {
+                                          'wallets': ['paytm']
+                                        }
+                                      };
+                                      razorpay.on(
+                                        Razorpay.EVENT_PAYMENT_ERROR,
+                                        handlePaymentErrorResponse,
+                                      );
+                                      razorpay.on(
+                                          Razorpay.EVENT_PAYMENT_SUCCESS,
+                                          handlePaymentSuccessResponse);
+                                      razorpay.on(
+                                          Razorpay.EVENT_EXTERNAL_WALLET,
+                                          handleExternalWalletSelected);
+                                      razorpay.open(options);
+                                    } else if (property == null ||
+                                        plot == null) {
+                                      showSnackBar(
+                                          context, 'Please select the Plot');
+                                    } else {
+                                      showSnackBar(
+                                          context, 'Please select a file');
+                                    }
+                                  }
+                                }),
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),
@@ -356,6 +391,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
     if (property != null) {
       PropertyServicesModel propertyServicesModel = PropertyServicesModel(
         service: widget.service,
+        client: ap.userModel.name,
         amount: widget.amount.toString(),
         city: 'Property $property',
         document: "",
@@ -380,6 +416,7 @@ class _AddServiceFormState extends State<AddServiceForm> {
     } else if (plot != null) {
       PlotServicesModel plotServicesModel = PlotServicesModel(
         service: widget.service,
+        client: ap.userModel.name,
         amount: widget.amount.toString(),
         city: 'Plot $plot',
         document: "",
@@ -402,5 +439,64 @@ class _AddServiceFormState extends State<AddServiceForm> {
         },
       );
     }
+  }
+}
+
+class Addfile extends StatelessWidget {
+  final void Function()? selectFile;
+  final bool fileExists;
+  const Addfile(
+      {super.key, required this.selectFile, required this.fileExists});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      padding: const EdgeInsets.only(left: 8.0),
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 1,
+          color: borderColor,
+        ),
+        borderRadius: BorderRadius.circular(
+          10,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(borderColor),
+            ),
+            onPressed: selectFile,
+            child: const Text(
+              'Choose File',
+              style: TextStyle(
+                color: secondaryColor,
+              ),
+            ),
+          ),
+          fileExists == true
+              ? Icon(
+                  Icons.check_circle,
+                  color: primaryColor,
+                )
+              : Text('...'),
+          TextButton(
+            onPressed: () {
+              showSnackBar(
+                  context, 'Request for this document has been raised');
+            },
+            child: Text(
+              'request',
+              style: TextStyle(
+                color: Colors.blue,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
