@@ -5,7 +5,6 @@ import 'package:asset_ziva/screens/vendor_screen.dart';
 import 'package:asset_ziva/utils/colors.dart';
 import 'package:asset_ziva/utils/constants.dart';
 import 'package:asset_ziva/widgets/home_card.dart';
-import 'package:asset_ziva/widgets/custom_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';

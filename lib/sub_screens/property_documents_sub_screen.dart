@@ -1,4 +1,3 @@
-import 'package:asset_ziva/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class PropertyDocumentsSubScreen extends StatelessWidget {
